@@ -11,19 +11,20 @@ const Nav:React.FC = ()=>{
 
     const print = ()=>{
         const host = process.env.HOST;
-        const printer = 'ws408';
+        let localStoragePrinterKey = 'smallPrinter';
+        if(tool == 'etiquetas')
+        localStoragePrinterKey = 'bigPrinter'
+        const printerName = localStorage.getItem(localStoragePrinterKey);
         const destination = `http://${host}:3001/printer`;
 
-        const confirmMsg = `Impresora: ${printer}\nDestino: ${destination}\nZPL:\n${zpl.current}`
+        const confirmMsg = `Impresora: ${printerName}\nDestino: ${destination}\nZPL:\n${zpl.current}`
         if(zpl.current && confirm(confirmMsg)){
-            const alfa = prompt('dimelo')
-            console.log(alfa)
             const config = {
                 method:'POST',
                 headers:{
                     'Content-type':'application/json'
                 },
-                body:JSON.stringify({printer:printer,zpl:zpl.current})
+                body:JSON.stringify({printer:printerName,zpl:zpl.current})
             }
             fetch(destination,config).then(()=>{alert('Archivo Enviado!')});
         }
