@@ -10,7 +10,7 @@ const Nav:React.FC = ()=>{
     const {zpl} = useContext(zplContext);
 
     const print = ()=>{
-        const host = '192.168.0.21';
+        const host = process.env.HOST;
         const printer = 'ws408';
         const destination = `http://${host}:3001/printer`;
 

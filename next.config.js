@@ -1,4 +1,8 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+    env:{
+        HOST:'localhost'
+    }
+}
 
 module.exports = nextConfig
