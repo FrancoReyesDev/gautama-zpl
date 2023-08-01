@@ -10,12 +10,12 @@ const Nav:React.FC = ()=>{
     const {zpl} = useContext(zplContext);
 
     const print = ()=>{
-        const host = process.env.HOST;
+        const {ip,port} = process.env.HOST;
         let localStoragePrinterKey = 'smallPrinter';
         if(tool == 'etiquetas')
         localStoragePrinterKey = 'bigPrinter'
         const printerName = localStorage.getItem(localStoragePrinterKey);
-        const destination = `http://${host}:3001/printer`;
+        const destination = `http://${ip}:${port}/printer`;
 
         const confirmMsg = `Impresora: ${printerName}\nDestino: ${destination}\nZPL:\n${zpl.current}`
         if(zpl.current && confirm(confirmMsg)){
