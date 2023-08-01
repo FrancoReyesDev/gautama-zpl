@@ -14,7 +14,8 @@ Agrega las variables de entorno para el host (la ip del servidor si vas a compar
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     env:{
-        HOST:'localhost'
+        host_ip:'localhost',
+        host_port:3000
     }
 }
 
