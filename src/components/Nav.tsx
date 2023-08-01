@@ -4,9 +4,10 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { useContext } from 'react'
 import { zplContext } from '@/context'
+import { NavLink } from './NavLink'
 
 const Nav:React.FC = ()=>{
-    const [tool,setTool] = useState('')    
+    const [currentTool,setCurrentTool] = useState('')    
     const {zpl} = useContext(zplContext);
 
     const print = ()=>{
@@ -14,7 +15,7 @@ const Nav:React.FC = ()=>{
         const port= process.env.host_port;
 
         let localStoragePrinterKey = 'smallPrinter';
-        if(tool == 'etiquetas')
+        if(currentTool == 'etiquetas')
         localStoragePrinterKey = 'bigPrinter'
         const printerName = localStorage.getItem(localStoragePrinterKey);
         const destination = `http://${ip}:${port}/printer`;
@@ -33,12 +34,14 @@ const Nav:React.FC = ()=>{
         
     }
 
+    const tools:[title:string,text?:string][] = [['etiquetas'],['flex','flex/colecta'],['full']];
+
     return (
         <nav className={styles.nav}>
             <div className={styles.navList}>
-                <Link onClick={()=>setTool('etiquetas')} className={tool=='etiquetas'?styles.clicked:''} href='etiquetas'>etiquetas</Link>
-                <Link onClick={()=>setTool('flex')} className={tool=='flex'?styles.clicked:''} href='flex'>flex/colecta</Link>
-                <Link onClick={()=>setTool('full')} className={tool=='full'?styles.clicked:''} href='full'>full</Link>
+                {tools.map((tool)=>(
+                    <NavLink tool={tool} currentTool={currentTool} setCurrentTool={setCurrentTool}/>
+                ))}
             </div>
             <div className={styles.print} onClick={print}>imprimir</div>
         </nav>
