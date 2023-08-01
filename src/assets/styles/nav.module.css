@@ -1,0 +1,29 @@
+.nav{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 0.8rem 1rem;
+    border-radius: 1rem;
+    border:1px solid var(--grey-2);
+    color: var(--grey-1);
+}
+
+.navList{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+
+.clicked{
+    font-weight: bold;
+    color: black;
+}
+
+.print{
+    padding: 0 0.2rem;
+    cursor: pointer;
+}
+
+.print:hover{
+    color: var(--black);
+}

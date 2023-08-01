@@ -1,0 +1,1 @@
+export {useEtiquetasHandler} from './useEtiquetasHandler'

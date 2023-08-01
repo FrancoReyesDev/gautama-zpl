@@ -1,0 +1,38 @@
+
+.label{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: .6rem 1rem;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 1rem;
+    overflow-y: scroll;
+    margin-bottom: 0.5rem;
+}
+
+
+.label>input{
+    /* border-bottom: 1px solid rgba(0,0,0,0.2); */
+    /* padding-bottom: 5px; */
+    all:unset;
+    flex-grow: 1;
+    padding-left: 0.4rem;
+}
+
+.label>input.input-cantidad{
+    flex-shrink: 1.4;
+}
+
+.label>.remover{
+    display: block;
+    cursor: pointer;
+    font-weight: 800;
+    padding-left: 0.8rem;
+    padding-right: 0.2rem;
+}
+
+.label>.remover:hover{
+    color:red;
+    cursor: pointer;
+}
