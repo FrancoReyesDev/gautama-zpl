@@ -9,7 +9,17 @@ A grandes rasgos:
 
 ### Configuraciones previas:
 Necesitaras un servidor de impresiones CUPS.
-Agrega las variables de entorno para el host (la ip del servidor si vas a compartirlo en red local o localhost) en [next.config.js](/home/ryn/git/gautamas/gautama/next.config.js).
+Agrega las variables de entorno para el host (la ip del servidor si vas a compartirlo en red local o localhost) en next.config.js
+```
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+    env:{
+        HOST:'localhost'
+    }
+}
+
+module.exports = nextConfig
+```
 
 ### Iniciar servidor:
 ```
