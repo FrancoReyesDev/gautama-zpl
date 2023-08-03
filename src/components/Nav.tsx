@@ -1,6 +1,5 @@
 'use client'
 import styles from '@/assets/styles/nav.module.css'
-import Link from 'next/link'
 import { useState } from 'react'
 import { useContext } from 'react'
 import { zplContext } from '@/context'
@@ -39,8 +38,8 @@ const Nav:React.FC = ()=>{
     return (
         <nav className={styles.nav}>
             <div className={styles.navList}>
-                {tools.map((tool)=>(
-                    <NavLink tool={tool} currentTool={currentTool} setCurrentTool={setCurrentTool}/>
+                {tools.map((tool,index)=>(
+                    <NavLink key={index} tool={tool} currentTool={currentTool} setCurrentTool={setCurrentTool}/>
                 ))}
             </div>
             <div className={styles.print} onClick={print}>imprimir</div>
