@@ -2,7 +2,7 @@
 
 import '@/assets/styles/globals.css'
 import { Nav } from '@/components'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { zplContext } from '@/context';
 
 export default function RootLayout({

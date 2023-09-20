@@ -1,21 +1,21 @@
 'use client'
 import styles from '@/assets/styles/nav.module.css'
-import { useState } from 'react'
-import { useContext } from 'react'
+import { useState,useContext } from 'react'
+import { usePathname } from 'next/navigation'
 import { zplContext } from '@/context'
 import { NavLink } from './NavLink'
 
 const Nav:React.FC = ()=>{
-    const [currentTool,setCurrentTool] = useState('')    
     const {zpl} = useContext(zplContext);
+    const currentTool = usePathname().substring(1);
 
     const print = ()=>{
         const ip= process.env.host_ip;
         const port= process.env.host_port;
 
-        let localStoragePrinterKey = 'smallPrinter';
+        let localStoragePrinterKey = 'bigPrinter'
         if(currentTool == 'etiquetas')
-        localStoragePrinterKey = 'bigPrinter'
+        localStoragePrinterKey = 'smallPrinter';
         const printerName = localStorage.getItem(localStoragePrinterKey);
         const destination = `http://${ip}:${port}/printer`;
 
@@ -39,7 +39,7 @@ const Nav:React.FC = ()=>{
         <nav className={styles.nav}>
             <div className={styles.navList}>
                 {tools.map((tool,index)=>(
-                    <NavLink key={index} tool={tool} currentTool={currentTool} setCurrentTool={setCurrentTool}/>
+                    <NavLink key={index} tool={tool} currentTool={currentTool}/>
                 ))}
             </div>
             <div className={styles.print} onClick={print}>imprimir</div>
