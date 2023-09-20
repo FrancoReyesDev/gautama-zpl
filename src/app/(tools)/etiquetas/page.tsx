@@ -16,9 +16,12 @@ const Etiquetas:React.FC = ()=>{
 
     return (
         <>
+        <div className={styles.etiquetasContainer}>
+
         {etiquetas.map(({id})=>(
             <Etiqueta key={id} delEtiqueta={delEtiqueta} updateEtiqueta={updateEtiqueta} id={id}/>
-        ))}
+            ))}
+        </div>
         <button onClick={()=>{addEtiqueta()}} className={styles.adder}>+</button>
         </>
     )
