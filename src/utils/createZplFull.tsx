@@ -69,7 +69,7 @@ import { formatZpl } from "./formatZpl";
 
 const createZplFull = (zpl:string)=>{
     const thermalMethod = '';
-    const formatFlex = "^XA\n^MD10\n^PR4\n"+thermalMethod+"\n^PW799\n^LL240\n";
+    const formatFlex = "^XA\n^MD4\n^PR4\n"+thermalMethod+"\n^PW799\n^LL240\n";
 
     const reemplazos = [
         ['FB400','FB350']

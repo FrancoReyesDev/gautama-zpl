@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     env:{
-        host_ip:'localhost',
+        host_ip:'192.168.1.13',
         host_port:3000
     }
 }
