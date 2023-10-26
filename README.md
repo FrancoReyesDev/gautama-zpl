@@ -22,6 +22,25 @@ const nextConfig = {
 module.exports = nextConfig
 ```
 
+### Crea un servicio:
+/etc/systemd/system/{nombre}.service
+donde:
+```
+[Unit]
+Description=Gauatama Next.js to print ZPL
+After=network.target
+
+[Service]
+ExecStart=npm run start
+WorkingDirectory=/home/rpm/git/gautama-zpl // example project path
+Restart=always
+User=rpm // example user name
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target
+```
+
 ### Iniciar servidor:
 ```
 npm install
