@@ -1,7 +1,7 @@
+import { LL, MD, PR, PW, THERMAL_METHOD } from "@/constants";
 
 const createZplFromEtiquetas = (etiquetas:{id:number;codigo:string;titulo:string;cantidad:number}[])=>{
-    const thermalMethod = ''
-    const format = "^XA\n^MD4\n"+thermalMethod+"\n^LH0,0\n^PW799\n^LL240";
+    const format = `^XA\n${MD}\n${PR}\n${THERMAL_METHOD}\n^LH0,0\n${PW}\n${LL.product}`;
     
     const formatLabelList = etiquetas.reduce((acc:Array<{codigo:string;titulo:string}>[],{cantidad,titulo,codigo})=>{
         if(cantidad && codigo){

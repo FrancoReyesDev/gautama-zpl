@@ -28,7 +28,7 @@ const Nav:React.FC = ()=>{
                 },
                 body:JSON.stringify({printer:printerName,zpl:zpl.current})
             }
-            fetch(destination,config).then(()=>{alert('Archivo Enviado!')});
+            fetch(destination,config).then(()=>{alert('Archivo Enviado!')}).catch(error=>(console.log({error})));
         }
         
     }

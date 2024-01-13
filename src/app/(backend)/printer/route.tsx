@@ -12,7 +12,7 @@ const GET = async()=>{
           printers.push(...printersData);
         });
   
-        subprocess.on('close', () => {
+        subprocess.on('close', (msg) => {
           resolve();
         });
   
@@ -41,11 +41,13 @@ const GET = async()=>{
             subprocess.stdin.write(zplEncoded);
             subprocess.stdin.end();
 
-            subprocess.on('close', () => {
+            subprocess.on('close', (msg) => {
+                console.log({msg})
                 resolve();
             });
             
             subprocess.on('error', (error) => {
+                console.log({error})
                 reject(error);
 
             });

@@ -1,8 +1,8 @@
+import { MD, PR, PW, THERMAL_METHOD } from "@/constants";
 import { formatZpl } from "./formatZpl";
 
 const createZplFlex = (zpl:string)=>{
-    const thermalMethod = '';
-    const formatFlex = "^XA\n^MD4\n^PR4\n"+thermalMethod+"\n^PW799\n^LL1518\n";
+    const formatFlex = "^XA\n"+MD+"\n"+PR+"\n"+THERMAL_METHOD+`\n${PW}\n^LL1518\n`;
     return formatZpl({zpl:zpl,reemplazos:[],format:formatFlex});
 }
 
