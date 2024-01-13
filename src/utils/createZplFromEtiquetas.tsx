@@ -15,13 +15,28 @@ const createZplFromEtiquetas = (etiquetas:{id:number;codigo:string;titulo:string
     let zplCode = "";
     for(const [codigo,titulo] of formatLabelList){
         if(!n){
-            zplCode+=format
-            +`^FO10,20^BY2^BCN,30,Y,N,N^FD${codigo}^FS\n`
-            +`^FO10,80^FB380,2,2,C^A0N,70,60^FD${titulo}^FS\n`
+            zplCode+=format+
+            `^FO10,20
+            ^BY2
+            ^BCN,30,Y,N,N
+            ^FD${codigo}
+            ^FS\n`+
+            `^FO10,80
+            ^FB380,2,2,C
+            ^A0N,70,60
+            ^FD${titulo}
+            ^FS\n`;
             n++;
         }else{
-            zplCode+=`^FO440,20^BY2^BCN,30,Y,N,N^FD${codigo}^FS\n`
-            +`^FO440,80^FB380,2,2,C^A0N,70,60^FD${titulo}^FS\n`
+            zplCode+=
+            `^FO440,20
+            ^BY2
+            ^BCN,30,Y,N,N
+            ^FD${codigo}
+            ^FS\n`+
+            `^FO440,80
+            ^FB380,2,2,C^A0N,70,60^FD${titulo}^FS\n`
+            
             +"^XZ\n"
             n--;
         }
