@@ -4,12 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import { Nav } from "./Nav";
 import { OptionsModal } from "./OptionsModal";
 import { Tool } from "@/types/Tool";
-import { LOCALSTORAGE_KEYS } from "@/constants";
+import { LOCALSTORAGE_KEYS, TOOL_PRINTER } from "@/constants";
 import { sendZplToPrinter } from "@/utils/sendZplToPrinter";
-import { createZplFlex, createZplFull } from "@/utils";
 import { useEtiquetas } from "@/hooks/useEtiquetas";
 import { EtiquetasTool } from "./EtiquetasTool";
 import { createZplFromEtiquetas } from "@/utils/createZplFromEtiquetas";
+import { createZplFlex } from "@/utils/createZplFlex";
+import { createZplFull } from "@/utils/createZplFull";
 
 export const HomePage:React.FC<{printers:string[]}> = ({printers})=>{
     const [currentTool,setCurrentTool] = useState<Tool>('etiquetas');
@@ -39,10 +40,16 @@ export const HomePage:React.FC<{printers:string[]}> = ({printers})=>{
         if(!confirm('confirmar impresion?'))
         return;
 
+        const localStoragePrinterKey = TOOL_PRINTER[currentTool];
+        const printerName = localStorage.getItem(localStoragePrinterKey);
+
+        if(printerName === null)
+        return;
+        
         let zpl = '';
 
         if(currentTool === 'etiquetas')
-        return sendZplToPrinter({zpl:createZplFromEtiquetas(etiquetas),currentTool});
+        return sendZplToPrinter({zpl:createZplFromEtiquetas(etiquetas),printerName});
 
         const inputZpl = (textAreaRef.current as HTMLTextAreaElement).value;
         
@@ -55,7 +62,7 @@ export const HomePage:React.FC<{printers:string[]}> = ({printers})=>{
         if(currentTool === 'full')
         zpl = createZplFull(inputZpl);
         
-        sendZplToPrinter({zpl,currentTool});       
+        sendZplToPrinter({zpl,printerName});       
     }
     
     useEffect(checkOptions);

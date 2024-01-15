@@ -2,6 +2,7 @@
 
 import modalStyles from '@/assets/styles/optionsModal.module.css'
 import { LOCALSTORAGE_KEYS } from '@/constants';
+import { factoryReset } from '@/utils/printerFunctions';
 import { useRef } from 'react';
 
 export const OptionsModal:React.FC<{printers:string[],closeModal:()=>void}> = ({printers,closeModal})=>{
@@ -47,6 +48,10 @@ export const OptionsModal:React.FC<{printers:string[],closeModal:()=>void}> = ({
         if('id' in event.target && event.target.id === 'modalBackground')
         closeModal();
     }
+
+    const factoryResetHandler = ()=>{
+        factoryReset({printers:[defaultBigPrinter,defaultSmallPrinter]})
+    }
     
     return (
         <div onClick={closeModalHandler} id='modalBackground' className={modalStyles['modal-overlay']}>
@@ -66,13 +71,16 @@ export const OptionsModal:React.FC<{printers:string[],closeModal:()=>void}> = ({
                     {printerSelectOptions}
                 </select>
 
+                <h3>Funciones de impresora</h3>
+                <input type="button" onClick={factoryResetHandler} value="reiniciar de fabrica" />
+
                 <h3>Conexiones</h3>
                 <label htmlFor="host">host</label>
                 <input ref={hostRef} type="text" defaultValue={defaultHost} name="host" id="host" />
                 <label htmlFor="port">port</label>
                 <input ref={portRef} type="text" name="port" id="port" defaultValue={defaultPort}/>
 
-                <input type="button" onClick={updateHandler} value="actualizar" />
+                <input type="submit" onClick={updateHandler} value="actualizar" />
             </div>
         </div>
     )

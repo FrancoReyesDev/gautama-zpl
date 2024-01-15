@@ -43,16 +43,22 @@
     color:var(--grey-1)
 }
 
-.modal-container>input[type='button']{
+.modal-container>input[type='button'],
+.modal-container>input[type='submit']{
     text-align: center;
-    margin-top: 1rem;
     cursor: pointer;
     user-select: none;
 }
 
-.modal-container>input[type='button']:hover{
+.modal-container>input[type='submit']{
+    margin-top: 1rem;
+}
+
+.modal-container>input[type='button']:hover,
+.modal-container>input[type='submit']:hover{
     background-color: var(--beige);
 }
   
+
   
   
