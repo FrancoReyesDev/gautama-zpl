@@ -12,12 +12,15 @@ export const sendZplToPrinter = ({zpl,currentTool}:{zpl:string,currentTool:Tool}
     const printDump = `Impresora: ${printerName}\nDestino: ${endpoint}\nZPL:\n${zpl}`
     console.log(printDump)
     
-    const config = {
+    const config:RequestInit = {
         method:'POST',
         headers:{
-            'Content-type':'application/json'
+            'Content-type':'application/json',
+
         },
-        body:JSON.stringify({printer:printerName,zpl})
+        body:JSON.stringify({printer:printerName,zpl}),
+        cache:"no-store",
+
     }
     fetch(endpoint,config).then(()=>{alert('Archivo Enviado!')}).catch(error=>(console.log({error})));
 }

@@ -6,7 +6,6 @@ export const metadata:Metadata = {
     description: 'Genera etiquetas con ZPL',
 }
 
-
 const Home = async ()=>{
     const printers =await getPrinters();
     return <HomePage printers={printers}/>
