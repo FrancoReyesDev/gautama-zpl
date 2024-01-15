@@ -5,8 +5,8 @@ export const sendZplToPrinter = ({zpl,printerName}:{zpl:string,printerName:strin
     const port = localStorage.getItem(LOCALSTORAGE_KEYS.port);
     const endpoint = `http://${host}:${port}/printer`;
     
-    // const printDump = `Impresora: ${printerName}\nDestino: ${endpoint}\nZPL:\n${zpl}`
-
+    const printDump = `Impresora: ${printerName}\nDestino: ${endpoint}\nZPL:\n${zpl}`
+    console.log(printDump)
     
     const config:RequestInit = {
         method:'POST',

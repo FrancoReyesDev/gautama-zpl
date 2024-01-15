@@ -49,7 +49,7 @@ export const HomePage:React.FC<{printers:string[]}> = ({printers})=>{
         let zpl = '';
 
         if(currentTool === 'etiquetas')
-        return sendZplToPrinter({zpl:createZplFromEtiquetas(etiquetas),printerName});
+        return sendZplToPrinter({zpl:createZplFromEtiquetas(etiquetas,"big"),printerName});
 
         const inputZpl = (textAreaRef.current as HTMLTextAreaElement).value;
         

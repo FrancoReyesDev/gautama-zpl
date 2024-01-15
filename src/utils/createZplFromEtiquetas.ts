@@ -1,6 +1,7 @@
-import { ETIQUETA, } from "@/constants";
+import { ETIQUETA, FORMAT, } from "@/constants";
+import { EtiquetaType } from "@/types/Etiqueta";
 
-const createZplFromEtiquetas = (etiquetas:{id:number;codigo:string;titulo:string;cantidad:number}[])=>{    
+const createZplFromEtiquetas = (etiquetas:{id:number;codigo:string;titulo:string;cantidad:number}[],type:EtiquetaType)=>{    
     const formatLabelList = etiquetas.reduce((acc,{cantidad,titulo,codigo})=>{
         if(cantidad && codigo){
             if(!titulo)
@@ -11,15 +12,25 @@ const createZplFromEtiquetas = (etiquetas:{id:number;codigo:string;titulo:string
         return acc;
     },[] as string[][])  
 
-    let zplCode = formatLabelList.reduce((acc,[codigo,titulo],index)=>{
-        if(index % 2 === 0)
-        return acc+ETIQUETA({codigo,titulo}).left;
+    let zplCode = "";
 
-        return acc+ETIQUETA({codigo,titulo}).right;
-    },'')
+    if(type === "big"){
+        zplCode = formatLabelList.reduce((acc,[codigo,titulo],index)=>{
+            const rowIndex = Math.trunc(index/2)
+            
+            if(index === 0)
+            acc = acc+FORMAT.etiquetasSmall;
+            
+            const side = index % 2 === 0?"left":"right"
+            return acc+ETIQUETA({codigo,titulo,index:rowIndex,size:"big"})[side];
+        },'')
+    
+        zplCode +="^XZ"
+    }
 
-    if(formatLabelList.length % 2 !== 0)
-    zplCode +="^XZ"
+    if(type === "big"){
+
+    }
     
     return zplCode;
 }

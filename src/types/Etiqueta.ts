@@ -4,3 +4,5 @@ export type Etiqueta = {
     titulo:string;
     cantidad:number;
 }
+
+export type EtiquetaType = "small"|"big" 
