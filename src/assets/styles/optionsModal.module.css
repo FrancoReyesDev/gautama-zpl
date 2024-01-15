@@ -1,0 +1,58 @@
+/* Estilos para el fondo oscuro detrás del modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2); /* fondo oscuro semi-transparente */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000; /* Asegura que el modal esté en la parte superior */
+}
+  
+  /* Estilos para el contenedor del modal */
+.modal-container {
+    background:var(--white);
+    border-radius: 3px;
+    /* border: 1px solid var(--grey-2); */
+    box-shadow: 0 0 10px rgba(212, 212, 212, 0.01); /* sombra ligera */
+    max-width: 80%; /* ajusta el ancho según sea necesario */
+    max-height: 80%; /* ajusta la altura según sea necesario */
+    overflow: auto; /* añade desplazamiento si el contenido es demasiado grande */
+    padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+    gap:0.4rem;
+    text-align: start;
+}
+
+.modal-container>h3{
+    margin-bottom: .3rem;
+}
+
+.modal-container>select,.modal-container>input{
+    font-size: 1rem;
+    background-color: var(--white);
+    border: 1px solid rgba(0,0,0,0.2);
+    flex-grow: 1;
+    padding-left: 0.5rem;
+    height: 2rem;
+    color:var(--grey-1)
+}
+
+.modal-container>input[type='button']{
+    text-align: center;
+    margin-top: 1rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+.modal-container>input[type='button']:hover{
+    background-color: var(--beige);
+}
+  
+  
+  

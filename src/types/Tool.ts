@@ -1,0 +1,1 @@
+export type Tool = 'flex' | 'full' | 'etiquetas';

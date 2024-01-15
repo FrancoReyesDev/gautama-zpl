@@ -1,3 +1,4 @@
+import { CLEAR_BITMAP } from "@/constants";
 import { formatZplRow } from "./formatZplRow";
 
 
@@ -11,9 +12,8 @@ const formatZpl = ({zpl,reemplazos,format}:FormatZplProps)=>{
     const formatedZpl = zpl.split('^XA').map((row,index)=>{
         return index>0?format+formatZplRow({zplRow:row,reemplazos:reemplazos}):""            
     })
-    const clearBitmap = '^XA^MCY^XZ';
 
-    return clearBitmap+formatedZpl.join("");
+    return CLEAR_BITMAP+formatedZpl.join("");
 }
 
 export {formatZpl};
