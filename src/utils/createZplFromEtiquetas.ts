@@ -1,5 +1,6 @@
-import { ETIQUETA, FORMAT, } from "@/constants";
+import { FORMAT, } from "@/constants";
 import { EtiquetaType } from "@/types/Etiqueta";
+import { genEtiqueta } from "./genEtiqueta";
 
 const createZplFromEtiquetas = (etiquetas:{id:number;codigo:string;titulo:string;cantidad:number}[],type:EtiquetaType)=>{    
     const formatLabelList = etiquetas.reduce((acc,{cantidad,titulo,codigo})=>{
@@ -22,7 +23,7 @@ const createZplFromEtiquetas = (etiquetas:{id:number;codigo:string;titulo:string
             acc = acc+FORMAT.etiquetasSmall;
             
             const side = index % 2 === 0?0:1
-            return acc+ETIQUETA({codigo,titulo,rowIndex,size:"big",side});
+            return acc+genEtiqueta({codigo,titulo,rowIndex,size:"big",side});
         },'')
     
         zplCode +="^XZ"
