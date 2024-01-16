@@ -87,5 +87,5 @@ const calculateBarcodeSizes = ({codigo,fieldBlockWidth}:{codigo:string,fieldBloc
 }
 
 const calculateSizeAndLinesForDescription = ({codigo,fieldBlockWidth,remainHeigth}:{codigo:string,fieldBlockWidth:number,remainHeigth:number})=>{
-
+    
 }
