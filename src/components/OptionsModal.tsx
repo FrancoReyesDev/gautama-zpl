@@ -2,7 +2,7 @@
 
 import modalStyles from '@/assets/styles/optionsModal.module.css'
 import { LOCALSTORAGE_KEYS } from '@/constants';
-import { factoryReset } from '@/utils/printerFunctions';
+import { clearBitmap, factoryReset } from '@/utils/printerFunctions';
 import { useRef } from 'react';
 
 export const OptionsModal:React.FC<{printers:string[],closeModal:()=>void}> = ({printers,closeModal})=>{
@@ -52,6 +52,10 @@ export const OptionsModal:React.FC<{printers:string[],closeModal:()=>void}> = ({
     const factoryResetHandler = ()=>{
         factoryReset({printers:[defaultBigPrinter,defaultSmallPrinter]})
     }
+
+    const clearBitmapHandler = ()=>{
+        clearBitmap({printers:[defaultBigPrinter,defaultSmallPrinter]})
+    }
     
     return (
         <div onClick={closeModalHandler} id='modalBackground' className={modalStyles['modal-overlay']}>
@@ -73,6 +77,7 @@ export const OptionsModal:React.FC<{printers:string[],closeModal:()=>void}> = ({
 
                 <h3>Funciones de impresora</h3>
                 <input type="button" onClick={factoryResetHandler} value="reiniciar de fabrica" />
+                <input type="button" onClick={clearBitmapHandler} value="limpiar bitmap" />
 
                 <h3>Conexiones</h3>
                 <label htmlFor="host">host</label>

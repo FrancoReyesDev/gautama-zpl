@@ -12,7 +12,7 @@ const createZplFlex = (zpl:string)=>{
         return [lh,`LH${numbers[0]},${modifiedNumber}`];
     });
 
-    return formatZpl({zpl:zpl,reemplazos:LHReplaces,format:formatFlex});
+    return formatZpl({zpl:zpl,reemplazos:[],format:formatFlex});
 }
 
 export {createZplFlex};

@@ -18,12 +18,15 @@ const LABEL_HEIGTH = {
     small:252,
     big:1518,
 }
+
+/*
 const LABEL_GAP = {
     small:24,
     big:104,
 }
+
 const LABEL_MARGIN_X ={
-    big:20,
+    big:10,
     small:10,
 }
 
@@ -31,9 +34,11 @@ const LABEL_MARGIN_Y = {
     big:10,
     small:10
 }
+*/
 
-const BARCODE_HEIGTH = 50
-const MARGIN = 16
+const BARCODE_HEIGTH = 60
+const BARCODE_CODE_HEIGTH = 50 // two lines 20 dots height and 10 dots gap
+const MARGIN = 10
 
 
 export const MD = "^MD4"; // Media Darkness
@@ -64,80 +69,71 @@ export const CLEAR_BITMAP = '^XA^MCY^XZ';
 
 
 // ZPL LABEL FORMAT
-const etiquetaLayout = ({format,codeWithFo,foBarcode,descriptionWithFo,borderWithFo}:{
+const etiquetaLayout = ({format,codeWithFo,foBarcode,descriptionWithFo,borderWithFo,codigo}:{
     borderWithFo?:string,
     format?:string,
     codeWithFo:string,
     foBarcode:string,
-    descriptionWithFo:string
+    descriptionWithFo:string,
+    codigo:string,
 })=>{
     return [
         format,
-        "^FXEtiqueta",
+        "\n^FXBorder",
         borderWithFo,
+        "\n^FXBarcode",
         foBarcode,
-        `^BY2,2,${BARCODE_HEIGTH}`,
-        `^BCN,18,N,N,N,A`, //deberian entrar 21 caracteres
+        `^BY1,2,`,
+        `^BCN,${BARCODE_HEIGTH},N,N,N,A`, //deberian entrar 21 caracteres
+        `^FD${codigo}^FS`,
+        `\n^FXCode`,
         codeWithFo,
+        `\n^FXDescription`,
         descriptionWithFo,
         
     ].join("\n");
 };
 
-export const ETIQUETA = ({format,codigo,titulo,index,size}:{
+export const ETIQUETA = ({format,codigo,titulo,rowIndex,size,side}:{
     format?:string,
 
     codigo:string,
     titulo:string,
 
-    index:number,
+    rowIndex:number,
     size:'small'|'big'
+    side:0|1
 })=>{
 
     const labelHeigth = Math.trunc(LABEL_HEIGTH[size]/6)
     const labelWidth = Math.trunc(ROW_WIDTH/2)
 
-    const marginX = LABEL_MARGIN_X[size];
-    const marginY = LABEL_MARGIN_Y[size];
+    const fieldBlockWidth = labelWidth-MARGIN*2;
 
-    let usableLabelHeight = Math.trunc(labelHeigth-marginY-marginY/2);
-    const usabeLabelWidth = Math.trunc(labelWidth-marginX-marginX/2);
+    const originX = Math.trunc(labelWidth*side);
+    const originY = labelHeigth*rowIndex;
+    const originXWithMargin = originX+MARGIN;
 
-    const borderX = (side:number)=>Math.trunc(labelWidth*side);
-    const borderY = labelHeigth*index;
+    const foBarcodeY = originY+MARGIN;
+    const foBarcode = (`^FO${originXWithMargin},${foBarcodeY}`);
 
-    console.log(borderY)
+    const foCodeY =foBarcodeY+MARGIN+BARCODE_HEIGTH;
+    const foCode = (`^FO${originXWithMargin},${foCodeY}`);
 
-    const foX = (side:number)=>Math.trunc(borderX(side)*side+marginX+(marginX/2)*side)
-    const foY = Math.trunc(borderY+marginY)
+    const foDescriptionY = foCodeY+MARGIN+BARCODE_CODE_HEIGTH
+    const foDescription = (`^FO${originXWithMargin},${foDescriptionY}`);
 
-    const foBarcode = (side:number)=>(`^FO${foX(side)},${foY}`);
-    usableLabelHeight -=BARCODE_HEIGTH;
+    // const remainHeigth = labelHeigth-foDescriptionY-MARGIN; 
 
-    const foCodeY = foY+MARGIN+BARCODE_HEIGTH;
-    const foCode = (side:number)=>(`^FO${foX(side)},${foCodeY}`);
-    const codeHeight = 32;
-
-    const foDescription = (side:number)=>(`^FO${foX(side)},${foCodeY+codeHeight+MARGIN}`);
-
-    usableLabelHeight -=codeHeight;
-
-    const left = etiquetaLayout({
+    const label = etiquetaLayout({
         format,
-        borderWithFo:`^FO${borderX(0)},${borderY}^GB${labelWidth},${labelHeigth},4^FS`,
-        foBarcode:foBarcode(0),
-        codeWithFo:foCode(0)+`^FB${codeHeight},2,2,L^A0N,18,16^FD${codigo}^FS`,
-        descriptionWithFo:foDescription(0)+`^FB${usabeLabelWidth},2,2,L^A0N,18,16^FD${titulo}^FS`,
+        borderWithFo:`^FO${originX},${originY}^GB${labelWidth},${labelHeigth},4^FS`,
+        foBarcode:foBarcode,
+        codeWithFo:foCode+`^FB${fieldBlockWidth},2,2,L^A0N,18,16^FD${codigo}^FS`,
+        descriptionWithFo:foDescription+`^FB${fieldBlockWidth},2,2,L^A0N,18,16^FD${titulo}^FS`,
+        codigo
     });
 
-    const right = etiquetaLayout({
-        format,
-        borderWithFo:`^FO${borderX(1)},${borderY}^GB${labelWidth},${labelHeigth},4^FS`,
-        foBarcode:foBarcode(1),
-        codeWithFo:`${foCode(1)}^FB${codeHeight},2,2,L^A0N,18,16^FD${codigo}^FS`,
-        descriptionWithFo:`${foDescription(1)}^FB${usabeLabelWidth-MARGIN},2,2,L^A0N,18,16^FD${titulo}^FS`,
-    });
-
-    return {left,right}
+    return label
 }
 

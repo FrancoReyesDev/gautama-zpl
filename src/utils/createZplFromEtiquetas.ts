@@ -21,8 +21,8 @@ const createZplFromEtiquetas = (etiquetas:{id:number;codigo:string;titulo:string
             if(index === 0)
             acc = acc+FORMAT.etiquetasSmall;
             
-            const side = index % 2 === 0?"left":"right"
-            return acc+ETIQUETA({codigo,titulo,index:rowIndex,size:"big"})[side];
+            const side = index % 2 === 0?0:1
+            return acc+ETIQUETA({codigo,titulo,rowIndex,size:"big",side});
         },'')
     
         zplCode +="^XZ"

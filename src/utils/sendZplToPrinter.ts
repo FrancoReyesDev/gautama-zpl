@@ -18,5 +18,5 @@ export const sendZplToPrinter = ({zpl,printerName}:{zpl:string,printerName:strin
         cache:"no-store",
 
     }
-    // fetch(endpoint,config).then(()=>{alert('Archivo Enviado!')}).catch(error=>(console.log({error})));
+    fetch(endpoint,config).then(()=>{alert('Archivo Enviado!')}).catch(error=>(console.log({error})));
 }
