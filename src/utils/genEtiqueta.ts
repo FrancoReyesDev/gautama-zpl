@@ -55,9 +55,12 @@ export const genEtiqueta = ({format,codigo,description,rowIndex,size,side}:{
     const foDescription = (`^FO${originXWithMargin},${foDescriptionY}`);
 
     const remainHeigth = labelHeigth-foDescriptionY-MARGIN; 
-    const barcodeModuleWidth = calculateBarcodeSizes({codigo,fieldBlockWidth})
+    const fixedFieldBlockWidth = fieldBlockWidth;
+    const fixedRemainHeigth = remainHeigth-20;
+    
+    const barcodeModuleWidth = calculateBarcodeSizes({codigo,fieldBlockWidth:fixedFieldBlockWidth})
 
-    const {rows,fontSize} = calculateSizeAndLinesForDescription({description,fieldBlockWidth:fieldBlockWidth-30,remainHeigth})
+    const {rows,fontSize} = calculateSizeAndLinesForDescription({description,fieldBlockWidth:fixedFieldBlockWidth,remainHeigth:fixedRemainHeigth})
 
     const border = LABEL_WITH_BORDER[size]?`^FO${originX},${originY}^GB${labelWidth},${labelHeigth},4^FS`:"";
     
@@ -99,28 +102,37 @@ const calculateBarcodeSizes = ({codigo,fieldBlockWidth}:{codigo:string,fieldBloc
 
 const calculateSizeAndLinesForDescription = ({description,fieldBlockWidth,remainHeigth}:{description:string,fieldBlockWidth:number,remainHeigth:number})=>{
 
-    const fixedFieldBlockWidth = fieldBlockWidth;
-    const fixedRemainHeigth = remainHeigth-20;
+
     
-    const calculate = ({fontSize,word,rows,wordIndex}:{fontSize:number,word:string,rows:number,wordIndex:number}):{fontSize:number,rows:number}=>{
-    
-        const partialWord = word.substring(0,wordIndex); 
-        console.log(partialWord)
+    const createRowsArray = ({word,rowSize}:{word:string,rowSize:number})=>{
+        const init:string[][] = [];
+        return Array.from(word).reduce((acc,letter,index)=>{
+            const rowIndex = Math.trunc(index/rowSize)
+
+            if(typeof acc[rowIndex] === "undefined")
+            acc.push([])
+            acc[rowIndex] = [...acc[rowIndex],letter];            
+            return acc
+        },init)
+    }
+
+    const calculate = ({fontSize,word,rows,wordIndex,}:{fontSize:number,word:string,rows:number,wordIndex:number}):{fontSize:number,rows:number}=>{
+        const partialWord = word.slice(0,wordIndex);
         
-        const nLetters = partialWord.length;
-        const wordLength = Math.trunc(fontSize*(Math.trunc(nLetters/rows)));
+        const breakFontSize = Math.trunc(remainHeigth/(rows+1));
+        fontSize = Math.trunc(fieldBlockWidth/Math.trunc(partialWord.length/rows)); 
+        
+        if(fontSize <= breakFontSize)
+        rows = rows+1;
 
-        if(wordLength>fixedFieldBlockWidth)
-        fontSize = Math.trunc(fixedFieldBlockWidth/Math.trunc(nLetters/rows))
-
-        rows = Math.trunc(fixedRemainHeigth/fontSize);
-
+        console.log({partialWord,breakFontSize,fontSize,rows})
+    
         if(wordIndex === word.length)
         return {fontSize,rows}
 
         return calculate({fontSize,word,rows,wordIndex:wordIndex+1})
     }
 
-    return calculate({word:description,rows:1,wordIndex:0,fontSize:fixedRemainHeigth});
+    return calculate({word:description,rows:1,wordIndex:1,fontSize:remainHeigth});
 
 }
