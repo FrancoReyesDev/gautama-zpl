@@ -57,8 +57,7 @@ export const genEtiqueta = ({format,codigo,description,rowIndex,size,side}:{
     const remainHeigth = labelHeigth-foDescriptionY-MARGIN; 
     const barcodeModuleWidth = calculateBarcodeSizes({codigo,fieldBlockWidth})
 
-    const {rows,fontSize} = calculateSizeAndLinesForDescription({description,fieldBlockWidth,remainHeigth})
-    console.log(rows,fontSize);
+    const {rows,fontSize} = calculateSizeAndLinesForDescription({description,fieldBlockWidth:fieldBlockWidth-30,remainHeigth})
 
     const border = LABEL_WITH_BORDER[size]?`^FO${originX},${originY}^GB${labelWidth},${labelHeigth},4^FS`:"";
     
@@ -100,19 +99,21 @@ const calculateBarcodeSizes = ({codigo,fieldBlockWidth}:{codigo:string,fieldBloc
 
 const calculateSizeAndLinesForDescription = ({description,fieldBlockWidth,remainHeigth}:{description:string,fieldBlockWidth:number,remainHeigth:number})=>{
 
-    
+    const fixedFieldBlockWidth = fieldBlockWidth;
+    const fixedRemainHeigth = remainHeigth-20;
     
     const calculate = ({fontSize,word,rows,wordIndex}:{fontSize:number,word:string,rows:number,wordIndex:number}):{fontSize:number,rows:number}=>{
     
         const partialWord = word.substring(0,wordIndex); 
+        console.log(partialWord)
         
         const nLetters = partialWord.length;
-        const wordLength = Math.trunc(fontSize*(nLetters/rows));
+        const wordLength = Math.trunc(fontSize*(Math.trunc(nLetters/rows)));
 
-        if(wordLength>fieldBlockWidth)
-        fontSize = Math.trunc(fieldBlockWidth/nLetters)
+        if(wordLength>fixedFieldBlockWidth)
+        fontSize = Math.trunc(fixedFieldBlockWidth/Math.trunc(nLetters/rows))
 
-        rows = Math.trunc(remainHeigth/fontSize);
+        rows = Math.trunc(fixedRemainHeigth/fontSize);
 
         if(wordIndex === word.length)
         return {fontSize,rows}
@@ -120,6 +121,6 @@ const calculateSizeAndLinesForDescription = ({description,fieldBlockWidth,remain
         return calculate({fontSize,word,rows,wordIndex:wordIndex+1})
     }
 
-    return calculate({word:description,rows:0,wordIndex:0,fontSize:remainHeigth});
+    return calculate({word:description,rows:1,wordIndex:0,fontSize:fixedRemainHeigth});
 
 }
