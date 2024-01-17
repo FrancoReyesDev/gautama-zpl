@@ -13,6 +13,7 @@ import { createZplFlex } from "@/utils/createZplFlex";
 import { createZplFull } from "@/utils/createZplFull";
 
 export const HomePage:React.FC<{printers:string[]}> = ({printers})=>{
+
     const [currentTool,setCurrentTool] = useState<Tool>('etiquetas');
     const [renderOptions,setRenderOptions] = useState<boolean>(false);
     const {etiquetas,cleanEtiquetas,...etiquetasControllers} = useEtiquetas();
@@ -26,7 +27,19 @@ export const HomePage:React.FC<{printers:string[]}> = ({printers})=>{
         const someConfigIsEmpty = [host,port,bigPrinter,smallPrinter].some(localStorageKey=>localStorage.getItem(localStorageKey) === null || localStorage.getItem(localStorageKey) === '')
 
         if(someConfigIsEmpty)
-        openOptions();
+        return openOptions();
+
+        const currentSmallPrinter = localStorage.getItem(smallPrinter);
+        const currentBigPritner = localStorage.getItem(bigPrinter);
+        const somePrinterDoesntExist = [currentBigPritner,currentSmallPrinter].some(currentPrinter=>{
+            const printerExist = printers.some(printer=>currentPrinter===printer);
+            return !printerExist;
+        })
+
+        if(somePrinterDoesntExist){
+            alert("Actualiza las impresoras.")
+            return openOptions()
+        }
     }
 
     const cleanTool = ()=>{
@@ -49,7 +62,7 @@ export const HomePage:React.FC<{printers:string[]}> = ({printers})=>{
         let zpl = '';
 
         if(currentTool === 'etiquetas')
-        return sendZplToPrinter({zpl:createZplFromEtiquetas(etiquetas,"big"),printerName});
+        return sendZplToPrinter({zpl:createZplFromEtiquetas(etiquetas,"small"),printerName});
 
         const inputZpl = (textAreaRef.current as HTMLTextAreaElement).value;
         
@@ -65,7 +78,7 @@ export const HomePage:React.FC<{printers:string[]}> = ({printers})=>{
         sendZplToPrinter({zpl,printerName});       
     }
     
-    useEffect(checkOptions);
+    useEffect(checkOptions,[renderOptions]);
     useEffect(cleanTool,[currentTool])
 
     const renderTextArea = currentTool !== 'etiquetas';

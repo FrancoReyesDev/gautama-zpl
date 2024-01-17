@@ -1,4 +1,4 @@
-import { BARCODE_CODE_HEIGTH, BARCODE_HEIGTH, FONT_MIN_SIZE, GAP, LABEL_HEIGTH, MARGIN, ROW_WIDTH } from "@/constants";
+import { BARCODE_CODE_HEIGTH, BARCODE_HEIGTH, FONT_MIN_SIZE, GAP, LABEL_FIX_GAP_X, LABEL_GAP_X, LABEL_HEIGTH, LABEL_WITH_BORDER, MARGIN, ROW_WIDTH } from "@/constants";
 
 // ZPL LABEL FORMAT
 const etiquetaLayout = ({format,codeWithFo,barcodeWithFo,descriptionWithFo,borderWithFo}:{
@@ -8,8 +8,11 @@ const etiquetaLayout = ({format,codeWithFo,barcodeWithFo,descriptionWithFo,borde
     barcodeWithFo:string,
     descriptionWithFo:string,
 })=>{
+
+    
+    
     return [
-        format,
+        "\n"+(format??""),
         "\n^FXBorder",
         borderWithFo,
         "\n^FXBarcode",
@@ -21,23 +24,24 @@ const etiquetaLayout = ({format,codeWithFo,barcodeWithFo,descriptionWithFo,borde
     ].join("\n");
 };
 
-export const genEtiqueta = ({format,codigo,titulo,rowIndex,size,side}:{
+export const genEtiqueta = ({format,codigo,description,rowIndex,size,side}:{
     format?:string,
 
     codigo:string,
-    titulo:string,
+    description:string,
 
     rowIndex:number,
     size:'small'|'big'
     side:0|1
 })=>{
 
-    const labelHeigth = Math.trunc(LABEL_HEIGTH[size]/6)
+    const labelsPerPage = size === "big"?6:1;
+    const labelHeigth = Math.trunc(LABEL_HEIGTH[size]/labelsPerPage)
     const labelWidth = Math.trunc(ROW_WIDTH/2)
 
     const fieldBlockWidth = labelWidth-MARGIN*2;
 
-    const originX = Math.trunc(labelWidth*side);
+    const originX = Math.trunc((labelWidth*side+(LABEL_GAP_X[size]*side))-LABEL_FIX_GAP_X[size]);
     const originY = labelHeigth*rowIndex;
     const originXWithMargin = originX+MARGIN;
 
@@ -53,15 +57,20 @@ export const genEtiqueta = ({format,codigo,titulo,rowIndex,size,side}:{
     const remainHeigth = labelHeigth-foDescriptionY-MARGIN; 
     const barcodeModuleWidth = calculateBarcodeSizes({codigo,fieldBlockWidth})
 
+    const {rows,fontSize} = calculateSizeAndLinesForDescription({description,fieldBlockWidth,remainHeigth})
+    console.log(rows,fontSize);
+
+    const border = LABEL_WITH_BORDER[size]?`^FO${originX},${originY}^GB${labelWidth},${labelHeigth},4^FS`:"";
+    
     const label = etiquetaLayout({
         format,
-        borderWithFo:`^FO${originX},${originY}^GB${labelWidth},${labelHeigth},4^FS`,
+        borderWithFo:border,
         barcodeWithFo:foBarcode+
         `^BY${barcodeModuleWidth},2`+
         `^BCN,${BARCODE_HEIGTH},N,N,N,A`+
         `^FD${codigo}^FS`,
         codeWithFo:foCode+`^FB${fieldBlockWidth},2,2,L^A0N,${FONT_MIN_SIZE},${FONT_MIN_SIZE}^FDcod: ${codigo}^FS`,
-        descriptionWithFo:foDescription+`^FB${fieldBlockWidth},2,0,L^A0N,18,18^FD${titulo}^FS`,
+        descriptionWithFo:foDescription+`^FB${fieldBlockWidth},${rows},4,L^A0N,${fontSize},${fontSize}^FD${description}^FS`,
     });
 
     return label;
@@ -81,11 +90,36 @@ const calculateBarcodeSizes = ({codigo,fieldBlockWidth}:{codigo:string,fieldBloc
     const moduleWidthTrunc = Math.trunc(moduleWidth);
 
     if(moduleWidthTrunc < 1)
-    return 1;
+    return 1;   
+
+    if(moduleWidthTrunc > 4)
+    return 4
 
     return moduleWidthTrunc;
 }
 
-const calculateSizeAndLinesForDescription = ({codigo,fieldBlockWidth,remainHeigth}:{codigo:string,fieldBlockWidth:number,remainHeigth:number})=>{
+const calculateSizeAndLinesForDescription = ({description,fieldBlockWidth,remainHeigth}:{description:string,fieldBlockWidth:number,remainHeigth:number})=>{
+
     
+    
+    const calculate = ({fontSize,word,rows,wordIndex}:{fontSize:number,word:string,rows:number,wordIndex:number}):{fontSize:number,rows:number}=>{
+    
+        const partialWord = word.substring(0,wordIndex); 
+        
+        const nLetters = partialWord.length;
+        const wordLength = Math.trunc(fontSize*(nLetters/rows));
+
+        if(wordLength>fieldBlockWidth)
+        fontSize = Math.trunc(fieldBlockWidth/nLetters)
+
+        rows = Math.trunc(remainHeigth/fontSize);
+
+        if(wordIndex === word.length)
+        return {fontSize,rows}
+
+        return calculate({fontSize,word,rows,wordIndex:wordIndex+1})
+    }
+
+    return calculate({word:description,rows:0,wordIndex:0,fontSize:remainHeigth});
+
 }

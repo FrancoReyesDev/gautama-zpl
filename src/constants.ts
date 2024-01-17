@@ -4,7 +4,10 @@ export const LOCALSTORAGE_KEYS = {
     smallPrinter:'smallPrinter',
     host:'host',
     port:'port',
+    devMode:"devMode",
 }
+
+export type DevMode = boolean; 
 
 export const TOOL_PRINTER = {
     full:LOCALSTORAGE_KEYS.smallPrinter,
@@ -15,7 +18,7 @@ export const TOOL_PRINTER = {
 // ZPL CONSTANTS
 export const ROW_WIDTH = 799;
 export const LABEL_HEIGTH = {
-    small:252,
+    small:239,
     big:1518,
 }
 
@@ -47,6 +50,19 @@ export const BARCODE_MODULES_PER_CHARACTER={ // aprox
 export const FONT_MIN_SIZE = 20;
 export const MARGIN = 20;
 export const GAP = 5;
+export const LABEL_GAP_X = {
+    big:0,
+    small:20
+}
+export const LABEL_FIX_GAP_X={
+    big:0,
+    small:10,
+}
+
+export const LABEL_WITH_BORDER = {
+    big:true,
+    small:false,
+}
 
 export const MD = "^MD4"; // Media Darkness
 export const PR = "^PR2"; // Print Rate

@@ -15,17 +15,24 @@ const createZplFromEtiquetas = (etiquetas:{id:number;codigo:string;titulo:string
 
     let zplCode = "";
 
-    if(type === "big"){
-        zplCode = formatLabelList.reduce((acc,[codigo,titulo],index)=>{
-            const rowIndex = Math.trunc(index/2)
-            
-            if(index === 0)
-            acc = acc+FORMAT.etiquetasSmall;
+    if(type === "small"){
+        zplCode = formatLabelList.reduce((acc,[codigo,description],index)=>{
+            // const rowIndex = Math.trunc(index/2)
             
             const side = index % 2 === 0?0:1
-            return acc+genEtiqueta({codigo,titulo,rowIndex,size:"big",side});
+
+            if(side === 0)
+            acc = acc+FORMAT.etiquetasSmall;
+
+            acc = acc+genEtiqueta({codigo,description,rowIndex:0,size:"small",side})
+
+            if(side === 1)
+            acc = acc+"^XZ"
+            
+            return acc;
         },'')
     
+        if(formatLabelList.length % 2 === 1)
         zplCode +="^XZ"
     }
 
