@@ -2,8 +2,9 @@
 
 import { Container, ThemeProvider, createTheme } from "@mui/material";
 import { ToolsTabs } from "../ToolsTabs/ToolsTabs";
+import { ToolsProvider } from "../ToolsTabs/Providers/ToolsProvider";
 
-export const Home: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const Home: React.FC<{ printers: string[] }> = ({ printers }) => {
   const theme = createTheme({
     palette: {
       primary: {
@@ -17,7 +18,9 @@ export const Home: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <ThemeProvider theme={theme}>
       <Container maxWidth={"md"}>
-        <ToolsTabs />
+        <ToolsProvider>
+          <ToolsTabs printers={printers} />
+        </ToolsProvider>
       </Container>
     </ThemeProvider>
   );

@@ -1,4 +1,5 @@
-// import { getPrinters } from "@/utils/getPrinters";
+import { getPrinters } from "@/utils/getPrinters";
+import { Home } from "@/components/Home/Home";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -6,9 +7,8 @@ export const metadata: Metadata = {
   description: "Genera etiquetas con ZPL",
 };
 
-const Home = async () => {
-  // const printers = await getPrinters();
-  return <Home />;
-  // return <HomePage printers={printers}/>
+const App = async () => {
+  const printers = await getPrinters();
+  return <Home printers={printers} />;
 };
-export default Home;
+export default App;

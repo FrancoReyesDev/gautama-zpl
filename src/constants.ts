@@ -1,26 +1,28 @@
+import { Tools } from "./components/ToolsTabs/types";
+
 // CONFIG CONSTANS
 export const LOCALSTORAGE_KEYS = {
-    bigPrinter:'bigPrinter',
-    smallPrinter:'smallPrinter',
-    host:'host',
-    port:'port',
-    devMode:"devMode",
-}
+  bigPrinter: "bigPrinter",
+  smallPrinter: "smallPrinter",
+  host: "host",
+  port: "port",
+  devMode: "devMode",
+};
 
-export type DevMode = boolean; 
+export type DevMode = boolean;
 
-export const TOOL_PRINTER = {
-    full:LOCALSTORAGE_KEYS.smallPrinter,
-    flex:LOCALSTORAGE_KEYS.bigPrinter,
-    etiquetas:LOCALSTORAGE_KEYS.smallPrinter,
-}
+export const TOOL_PRINTER: Record<Tools, string> = {
+  full: LOCALSTORAGE_KEYS.smallPrinter,
+  "flex/colecta": LOCALSTORAGE_KEYS.bigPrinter,
+  etiquetas: LOCALSTORAGE_KEYS.smallPrinter,
+};
 
 // ZPL CONSTANTS
 export const ROW_WIDTH = 799;
 export const LABEL_HEIGTH = {
-    small:239,
-    big:1518,
-}
+  small: 239,
+  big: 1518,
+};
 
 /*
 const LABEL_GAP = {
@@ -39,43 +41,45 @@ const LABEL_MARGIN_Y = {
 }
 */
 
-export const BARCODE_HEIGTH = 60
-export const BARCODE_CODE_HEIGTH = 36 // two lines 20 dots height and 10 dots gap
-export const BARCODE_MODULES_PER_CHARACTER={ // aprox
-    string:22,
-    number:11,
-    beginAndEnding:110,
-}
+export const BARCODE_HEIGTH = 60;
+export const BARCODE_CODE_HEIGTH = 36; // two lines 20 dots height and 10 dots gap
+export const BARCODE_MODULES_PER_CHARACTER = {
+  // aprox
+  string: 22,
+  number: 11,
+  beginAndEnding: 110,
+};
 
 export const FONT_MIN_SIZE = 20;
 export const MARGIN = 20;
 export const GAP = 5;
 export const LABEL_GAP_X = {
-    big:0,
-    small:20
-}
-export const LABEL_FIX_GAP_X={
-    big:0,
-    small:10,
-}
+  big: 0,
+  small: 20,
+};
+export const LABEL_FIX_GAP_X = {
+  big: 0,
+  small: 10,
+};
 
 export const LABEL_WITH_BORDER = {
-    big:true,
-    small:false,
-}
+  big: true,
+  small: false,
+};
 
 export const MD = "^MD4"; // Media Darkness
 export const PR = "^PR2"; // Print Rate
-export const PW = "^PW"+ROW_WIDTH; // Print Width
+export const PW = "^PW" + ROW_WIDTH; // Print Width
 
 export const THERMAL_METHOD = "^MTT"; // Media type (T: thermal transfer, D: Direct transfer)
-export const LH = "^LH0,0" // Label Home
-export const LL = { // Label Length (heigth)
-    etiquetas:"^LL"+LABEL_HEIGTH.small,
-    full:"^LL"+LABEL_HEIGTH.small,
-    flex:"^LL"+LABEL_HEIGTH.big,
-    colecta:"^LL"+LABEL_HEIGTH.big,
-}
+export const LH = "^LH0,0"; // Label Home
+export const LL = {
+  // Label Length (heigth)
+  etiquetas: "^LL" + LABEL_HEIGTH.small,
+  full: "^LL" + LABEL_HEIGTH.small,
+  flex: "^LL" + LABEL_HEIGTH.big,
+  colecta: "^LL" + LABEL_HEIGTH.big,
+};
 /*export const LS = { // espacio entre etiquetas
     flex:"^LS"+LABEL_GAP.big,
     colecta:"^LS"+LABEL_GAP.big,
@@ -83,13 +87,8 @@ export const LL = { // Label Length (heigth)
 }*/
 
 export const FORMAT = {
-    etiquetasSmall:`^XA\n${MD}\n${PR}\n${THERMAL_METHOD}\n${LH}\n${PW}\n${LL.etiquetas}`,
-    etiquetasBig:`^XA\n${MD}\n${PR}\n${THERMAL_METHOD}\n${LH}\n${PW}\n${LL.etiquetas}`,
+  etiquetasSmall: `^XA\n${MD}\n${PR}\n${THERMAL_METHOD}\n${LH}\n${PW}\n${LL.etiquetas}`,
+  etiquetasBig: `^XA\n${MD}\n${PR}\n${THERMAL_METHOD}\n${LH}\n${PW}\n${LL.etiquetas}`,
+};
 
-}
-
-export const CLEAR_BITMAP = '^XA^MCY^XZ';
-
-
-
-
+export const CLEAR_BITMAP = "^XA^MCY^XZ";
