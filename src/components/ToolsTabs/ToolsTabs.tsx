@@ -98,7 +98,7 @@ export const ToolsTabs: React.FC<{ printers: string[] }> = ({ printers }) => {
     sendZplToPrinter({ zpl: state.zpl, printerName });
   };
 
-  useEffect(checkOptions, [renderOptions]);
+  // useEffect(checkOptions, [renderOptions]);
 
   return (
     <>

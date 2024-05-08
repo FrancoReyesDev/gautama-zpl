@@ -11,7 +11,7 @@ const createZplFromEtiquetas = (
     (acc, { cantidad, titulo, codigo }) => {
       if (cantidad && codigo) {
         if (!titulo) titulo = codigo;
-        acc.push(...Array(cantidad).fill([codigo, titulo]));
+        for (let i = 0; i < cantidad; i++) acc.push([codigo, titulo]);
       }
 
       return acc;
@@ -23,8 +23,6 @@ const createZplFromEtiquetas = (
 
   if (type === "small") {
     zplCode = formatLabelList.reduce((acc, [codigo, description], index) => {
-      // const rowIndex = Math.trunc(index/2)
-
       const side = index % 2 === 0 ? 0 : 1;
 
       if (side === 0) acc = acc + FORMAT.etiquetasSmall;
