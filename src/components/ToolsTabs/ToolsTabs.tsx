@@ -1,4 +1,4 @@
-import { Box, Tab, Tabs } from "@mui/material";
+import { Box, Button, Tab, Tabs } from "@mui/material";
 import { ToolsProvider, useTools } from "./Providers/ToolsProvider";
 import { Tools } from "./types";
 import { Tools_Full } from "../Tools/Full/Tools_Full";
@@ -93,9 +93,10 @@ export const ToolsTabs: React.FC<{ printers: string[] }> = ({ printers }) => {
     const localStoragePrinterKey = TOOL_PRINTER[state.tool];
     const printerName = localStorage.getItem(localStoragePrinterKey);
 
-    if (printerName === null) return;
+    // if (printerName === null) return;
 
-    sendZplToPrinter({ zpl: state.zpl, printerName });
+    console.log(state.zpl);
+    // sendZplToPrinter({ zpl: state.zpl, printerName });
   };
 
   // useEffect(checkOptions, [renderOptions]);
@@ -130,8 +131,12 @@ export const ToolsTabs: React.FC<{ printers: string[] }> = ({ printers }) => {
             <Tab label="full" {...a11yProps("full")} />
           </Tabs>
           <Box display={"flex"} gap={1}>
-            <button onClick={openOptions}>configuraciones</button>
-            <button onClick={printZplHandler}>imprimir</button>
+            <Button size="small" variant="text" onClick={openOptions}>
+              configuraciones
+            </Button>
+            <Button size="small" variant="text" onClick={printZplHandler}>
+              imprimir
+            </Button>
           </Box>
         </Box>
         <ToolPanel value={state.tool} idTool={"etiquetas"}>
