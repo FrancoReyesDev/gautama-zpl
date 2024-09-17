@@ -93,10 +93,10 @@ export const ToolsTabs: React.FC<{ printers: string[] }> = ({ printers }) => {
     const localStoragePrinterKey = TOOL_PRINTER[state.tool];
     const printerName = localStorage.getItem(localStoragePrinterKey);
 
-    // if (printerName === null) return;
+    if (printerName === null) return;
 
-    console.log(state.zpl);
-    // sendZplToPrinter({ zpl: state.zpl, printerName });
+    // console.log(state.zpl);
+    sendZplToPrinter({ zpl: state.zpl, printerName });
   };
 
   // useEffect(checkOptions, [renderOptions]);
