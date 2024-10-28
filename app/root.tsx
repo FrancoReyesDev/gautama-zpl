@@ -1,6 +1,8 @@
 import {
   Links,
+  LiveReload,
   Meta,
+  NavLink,
   Outlet,
   Scripts,
   ScrollRestoration,
@@ -8,6 +10,8 @@ import {
 import type { LinksFunction } from "@remix-run/node";
 
 import "./tailwind.css";
+import TabLink from "./components/TabLink";
+import SettingsIcon from "./components/icons/Settings";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -31,7 +35,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="h-screen">
         {children}
         <ScrollRestoration />
         <Scripts />
@@ -40,6 +44,33 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
+function Navbar() {
+  return (
+    <header className="navbar">
+      <div
+        role="tablist"
+        className="navbar-start tabs tabs-bordered prose prose-a:uppercase prose-a:no-underline prose-a:font-normal"
+      >
+        <TabLink to="/">etiquetas</TabLink>
+        <TabLink to="/zpl">zpl</TabLink>
+      </div>
+      <div className="navbar-end gap-3">
+        <button className="btn btn-neutral">imprimir</button>
+        <button className="btn btn-circle btn-neutral">
+          <SettingsIcon />
+        </button>
+      </div>
+    </header>
+  );
+}
+
 export default function App() {
-  return <Outlet />;
+  return (
+    <div className="container mx-auto md:w-4/5 lg:w-3/6 p-2 lg:py-6">
+      <Navbar />
+      <div className="mt-4">
+        <Outlet />
+      </div>
+    </div>
+  );
 }
