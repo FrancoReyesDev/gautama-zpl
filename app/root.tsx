@@ -1,8 +1,6 @@
 import {
   Links,
-  LiveReload,
   Meta,
-  NavLink,
   Outlet,
   Scripts,
   ScrollRestoration,
@@ -35,7 +33,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body className="h-screen">
+      <body className="min-h-screen">
         {children}
         <ScrollRestoration />
         <Scripts />
@@ -55,8 +53,7 @@ function Navbar() {
         <TabLink to="/zpl">zpl</TabLink>
       </div>
       <div className="navbar-end gap-3">
-        <button className="btn btn-neutral">imprimir</button>
-        <button className="btn btn-circle btn-neutral">
+        <button className="btn btn-ghost">
           <SettingsIcon />
         </button>
       </div>
@@ -68,9 +65,7 @@ export default function App() {
   return (
     <div className="container mx-auto md:w-4/5 lg:w-3/6 p-2 lg:py-6">
       <Navbar />
-      <div className="mt-4">
-        <Outlet />
-      </div>
+      <Outlet />
     </div>
   );
 }
