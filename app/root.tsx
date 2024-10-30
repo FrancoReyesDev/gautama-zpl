@@ -33,7 +33,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body className="min-h-screen">
+      <body className="bg-base-200 min-h-screen">
         {children}
         <ScrollRestoration />
         <Scripts />
@@ -44,15 +44,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 function Navbar() {
   return (
-    <header className="navbar">
+    <header className="navbar border-b-2">
       <div
         role="tablist"
-        className="navbar-start tabs tabs-bordered prose prose-a:uppercase prose-a:no-underline prose-a:font-normal"
+        className="navbar-start tabs prose prose-a:uppercase prose-a:no-underline"
       >
-        <TabLink to="/">etiquetas</TabLink>
+        <TabLink to="/etiquetas">etiquetas</TabLink>
         <TabLink to="/zpl">zpl</TabLink>
       </div>
-      <div className="navbar-end gap-3">
+      <div className="navbar-end ">
         <button className="btn btn-ghost">
           <SettingsIcon />
         </button>
@@ -63,7 +63,7 @@ function Navbar() {
 
 export default function App() {
   return (
-    <div className="container mx-auto md:w-4/5 lg:w-3/6 p-2 lg:py-6">
+    <div className="container mx-auto md:w-4/5 lg:w-3/6 pb-4 lg:py-6">
       <Navbar />
       <Outlet />
     </div>
