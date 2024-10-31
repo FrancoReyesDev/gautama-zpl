@@ -1,7 +1,8 @@
 import type { MetaFunction } from "@remix-run/node";
 import { ChangeEvent, useState } from "react";
-import PrintDialog from "~/components/dialogs/Print";
+import PrintDialog from "~/components/dialogs/PrintDialog";
 import BackspaceIcon from "~/components/icons/Backspace";
+import useEtiquetas from "~/hooks/useEtiquetas";
 
 export const meta: MetaFunction = () => {
   return [
@@ -81,7 +82,6 @@ function Etiqueta({ values, setValues, removeEtiqueta }: EtiquetaProps) {
         className="input-sm input-ghost border w-full max-w-xs rounded"
         placeholder="cantidad"
         min={1}
-        defaultValue={1}
         value={values["quantity"]}
         onChange={createChangeHandler("quantity")}
       />
@@ -99,34 +99,17 @@ function Etiqueta({ values, setValues, removeEtiqueta }: EtiquetaProps) {
 }
 
 export default function Index() {
-  const [etiquetas, setEtiquetas] = useState<
-    Map<number, typeof defaultEtiqueta>
-  >(new Map([[1, defaultEtiqueta]]));
+  const {
+    etiquetas,
+    addEtiqueta,
+    updateEtiqueta,
+    removeAllEtiquetas,
+    removeEtiqueta,
+  } = useEtiquetas();
 
-  function addEtiqueta() {
-    const newId = etiquetas.size === 0 ? 1 : Math.max(...etiquetas.keys()) + 1;
-    etiquetas.set(newId, { ...defaultEtiqueta });
-    setEtiquetas(new Map(etiquetas));
-  }
-
-  function setValues(id: number, newValues: typeof defaultEtiqueta) {
-    etiquetas.set(id, newValues);
-    setEtiquetas(new Map(etiquetas));
-  }
-
-  function removeEtiqueta(id: number) {
-    etiquetas.delete(id);
-    setEtiquetas(new Map(etiquetas));
-  }
-
-  function removeAll() {
-    etiquetas.clear();
-    setEtiquetas(new Map(etiquetas));
-  }
-
-  function createSetValuesHandler(id: number) {
-    return function (newValues: typeof defaultEtiqueta) {
-      return setValues(id, newValues);
+  function createUpdateValuesHandler(id: number) {
+    return function (values: typeof defaultEtiqueta) {
+      return updateEtiqueta(id, values);
     };
   }
 
@@ -138,13 +121,13 @@ export default function Index() {
 
   return (
     <div className="grid grid-rows-[auto_1fr_auto] gap-4 px-4 mt-4">
-      <Controllers addEtiqueta={addEtiqueta} removeAll={removeAll} />
+      <Controllers addEtiqueta={addEtiqueta} removeAll={removeAllEtiquetas} />
       <div className="flex flex-col gap-2 grow">
         {Array.from(etiquetas).map(([id, values]) => (
           <Etiqueta
             key={id}
             values={values}
-            setValues={createSetValuesHandler(id)}
+            setValues={createUpdateValuesHandler(id)}
             removeEtiqueta={createRemoveEtiquetaHandler(id)}
           />
         ))}

@@ -47,7 +47,7 @@ function Navbar() {
     <header className="navbar border-b-2">
       <div
         role="tablist"
-        className="navbar-start tabs prose prose-a:uppercase prose-a:no-underline"
+        className="navbar-start tabs tabs-bordered prose prose-a:uppercase prose-a:no-underline"
       >
         <TabLink to="/etiquetas">etiquetas</TabLink>
         <TabLink to="/zpl">zpl</TabLink>
