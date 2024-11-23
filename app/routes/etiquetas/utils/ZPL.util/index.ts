@@ -24,20 +24,11 @@ export default class ZPLUtil implements Props {
   }
 
   static getModuleWidth(barcode: string, width: number, dpi: number) {
-    return Math.min(
-      Math.max(
-        _.ceil(
-          ZPLUtil.cmToDots(
-            width / ((11 * barcode.length + 11) * 3),
-            dpi,
-            false
-          ),
-          1
-        ),
-        1
-      ),
-      3
-    );
+    const totalDotsAvailable = ZPLUtil.cmToDots(width, dpi, false);
+    const totalModules = 11 * barcode.length + 11;
+    const idealModuleWidth = totalDotsAvailable / (totalModules * 2); // Considera ratio
+
+    return _.ceil(Math.min(Math.max(idealModuleWidth, 1), 3), 1);
   }
 
   createItemLabels(labels: { sku: string; title: string; quantity: number }[]) {

@@ -54,12 +54,18 @@ export default function Index() {
 
   const zplUtil = new ZPLUtil({
     dpi: 203,
-    cols: 1,
+    cols: 0,
     labelTemplate: "w5cm_h3cm",
   });
 
   console.log(
-    zplUtil.createItemLabels([{ sku: "123456", title: "holaa", quantity: 1 }])
+    zplUtil.createItemLabels([
+      {
+        sku: "123456abcdefg123456",
+        title: "SKU #9827345 MOTOR PARTS Y",
+        quantity: 1,
+      },
+    ])
   );
 
   return (
