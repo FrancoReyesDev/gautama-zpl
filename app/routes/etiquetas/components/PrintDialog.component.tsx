@@ -1,4 +1,3 @@
-import { useFetcher } from "@remix-run/react";
 import { useRef } from "react";
 
 interface PrintDialogProps {
@@ -6,7 +5,6 @@ interface PrintDialogProps {
 }
 
 export default function PrintDialog({ zpl }: PrintDialogProps) {
-  const { submit, Form } = useFetcher();
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   function handleShowModal() {
