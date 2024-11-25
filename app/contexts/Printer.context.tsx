@@ -1,6 +1,10 @@
 import { createContext, useContext } from "react";
 
-const context = createContext(null);
+function usePrinter() {
+  return { printZpl() {} };
+}
+
+const context = createContext<ReturnType<typeof usePrinter> | null>(null);
 
 export function usePrinterContext() {
   return useContext(context);

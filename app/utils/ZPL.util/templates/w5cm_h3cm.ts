@@ -21,7 +21,7 @@ export default function w5cm_h3cm(
   const textFieldBoxHeight = availableHeight / 2;
   const lineGap = 0;
   const textFieldBoxConfig = ZPLUtil.getTextFieldBoxConfig({
-    minFontHeight: textFieldBoxHeight / 3,
+    minFontHeight: textFieldBoxHeight / 4,
     boxHeight: textFieldBoxHeight,
     boxWidth: availableWidth,
     lineGap,
@@ -35,27 +35,27 @@ export default function w5cm_h3cm(
 
   for (let row = 0; row < rows; row++) {
     const text = (
-      title.length > maxLetters ? title.slice(0, maxLetters) : title
+      title.length > maxLetters ? title.slice(0, maxLetters) + "..." : title
     ).slice(maxLettersPerRow * row, maxLettersPerRow * (row + 1));
 
     const yOrigin = availableHeight / 2 + fontHeight * row;
     textLines.push(
       `^FO${xOrigin},${cmToDots(yOrigin) + 5}`,
       `^A1N,${cmToDots(fontHeight)},${cmToDots(fontWidth * 0.9)}`,
-      `^FD${text}^FS`
+      `^FD${text.trim()}^FS`
     );
   }
 
   return [
     `^LL${cmToDots(height)}`,
     `^FO${xOrigin},${cmToDots(paddingYCm)}`,
-    `^BY${moduleWidth},3,${cmToDots(availableHeight / 2)}`,
-    `^BCN,${cmToDots((availableHeight * 3) / 8)},Y,Y,N`,
+    `^BY${moduleWidth},3,}`,
+    `^BCN,${cmToDots(availableHeight / 4)},N,N,N`,
     `^FD>:${barcode}^FS`,
-    // `^FO${xOrigin},${cmToDots(availableHeight / 2) + 10}`,
-    // `^A1N,${cmToDots(fontHeight)},${cmToDots(fontWidth)}`,
-    // `^FB${cmToDots(availableWidth)},${rows},,L,0`,
-    // `^FD${title}^FS`,
+    `^FO${xOrigin},${cmToDots(paddingYCm + availableHeight / 4) + 6}`,
+    `^A0N,${20},${20}`,
+    `^FDsku: ${barcode}^FS`,
+
     ...textLines,
   ].join("\n");
 }

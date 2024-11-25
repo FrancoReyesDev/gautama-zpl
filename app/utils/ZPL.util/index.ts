@@ -95,25 +95,42 @@ export default class ZPLUtil implements Props {
     for (const textFieldBoxConfig of textFieldBoxConfigs) {
       if (str.length > textFieldBoxConfig.maxLetters) continue;
 
-      // const { rows } = textFieldBoxConfig;
-
-      // const availableWidth = boxWidth * rows;
-
-      // const fontWidth = availableWidth / str.length;
-      // const fontHeight = fontWidth * 2;
-      // const maxLetters = availableWidth / fontWidth;
-
-      // return { fontHeight, fontWidth, rows, maxLetters };
       return textFieldBoxConfig;
     }
 
     return textFieldBoxConfigs[textFieldBoxConfigs.length - 1];
   }
 
-  createItemLabels(labels: { sku: string; title: string; quantity: number }[]) {
-    return templates[this.labelTemplate](
-      { barcode: labels[0]["sku"], title: labels[0]["title"] },
-      { dpi: this.dpi, col: 1 }
-    );
+  createZplFromLabels(
+    labels: { sku: string; title: string; quantity: number }[]
+  ) {
+    const arrayOfLabels: { sku: string; title: string }[] = [];
+
+    labels.forEach(({ sku, title, quantity }) => {
+      if (sku.trim() === "" || quantity === 0) return;
+
+      const array = new Array(quantity);
+      array.fill({ sku, title: title || sku }, 0);
+
+      arrayOfLabels.push(...array);
+    });
+
+    let col = 0;
+    return arrayOfLabels
+      .map(({ sku, title }, index) => {
+        let labelZpl = templates[this.labelTemplate](
+          { barcode: sku, title },
+          { dpi: this.dpi, col }
+        );
+
+        if (col === 0) labelZpl = "^XA" + labelZpl;
+        if (col === this.cols - 1 || index === arrayOfLabels.length - 1)
+          labelZpl = labelZpl + "^XZ";
+
+        col = (col + 1) % this.cols;
+
+        return labelZpl;
+      })
+      .join("\n");
   }
 }

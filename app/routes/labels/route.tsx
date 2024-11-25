@@ -1,7 +1,6 @@
 import LabelType from "./types/Label.type";
 import { Label } from "./components/Label.component";
 import PrintDialog from "./components/PrintDialog.component";
-import ZPLUtil from "./utils/ZPL.util";
 import useLabels from "./hooks/useLabels";
 
 interface ControllersProps {
@@ -47,22 +46,6 @@ export default function Index() {
     };
   }
 
-  const zplUtil = new ZPLUtil({
-    dpi: 203,
-    cols: 0,
-    labelTemplate: "w5cm_h3cm",
-  });
-
-  console.log(
-    zplUtil.createItemLabels([
-      {
-        sku: "123456abcdefg123456",
-        title: "hola y chau ala so un texto muy largooo veamos que pas",
-        quantity: 1,
-      },
-    ])
-  );
-
   return (
     <div className="grid grid-rows-[auto_1fr_auto] gap-4 px-4 mt-4">
       <Controllers addLabel={addLabel} removeAll={removeAllLabels} />
@@ -76,7 +59,7 @@ export default function Index() {
           />
         ))}
       </div>
-      <PrintDialog zpl="hola" />
+      <PrintDialog labels={labels} />
     </div>
   );
 }
