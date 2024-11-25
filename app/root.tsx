@@ -33,7 +33,7 @@ function Navbar() {
   return (
     <header className="navbar px-4">
       <div role="tablist" className="navbar-start tabs tabs-bordered ">
-        <TabLink to="/etiquetas">etiquetas</TabLink>
+        <TabLink to="/labels">etiquetas</TabLink>
         <TabLink to="/zpl">zpl</TabLink>
       </div>
       <div className="navbar-end ">

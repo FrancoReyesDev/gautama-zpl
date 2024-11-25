@@ -1,10 +1,10 @@
-type Etiqueta = {
+type Label = {
   title: string;
   sku: string;
   quantity: number;
 };
 
-type Etiquetas = Map<number, Etiqueta>;
+type Labels = Map<number, Label>;
 
 interface PrinterConfig {
   density: number;

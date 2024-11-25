@@ -43,6 +43,6 @@ class ZPL {
     }
 }
 
-export default function createZplFromEtiquetas(etiquetas: Etiquetas) {
+export default function createZplFromLabels(labels: Labels) {
     const label = 
 }
