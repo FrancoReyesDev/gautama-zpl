@@ -1,14 +1,35 @@
-import LabelType from "./types/Label.type";
 import { Label } from "./components/Label.component";
 import PrintDialog from "./components/PrintDialog.component";
 import useLabels from "./hooks/useLabels";
+import { ChangeEvent, useState } from "react";
+import Papa from "papaparse"
+
+type LabelType = [sku:string,title:string,quantity:number]
 
 interface ControllersProps {
   addLabel(): void;
   removeAll(): void;
+  addBulkLabels(labels:LabelType[]):void
 }
 
-function Controllers({ addLabel, removeAll }: ControllersProps) {
+function Controllers({ addLabel, removeAll,addBulkLabels }: ControllersProps) {
+  function CsvToJsonConverter() {
+  
+    function handleFileChange(event:ChangeEvent<HTMLInputElement>) {
+      const file = event.target.files?.[0]
+      if (file) {
+        Papa.parse<LabelType>(file, {
+          header: false, // Convierte el CSV directamente en objetos basados en las cabeceras
+          complete: (result) => {
+            addBulkLabels(result.data); // Guarda el JSON en el estado
+          },
+          error: (error) => {
+            console.error("Error al procesar el archivo CSV:", error);
+          },
+        });
+      }
+    };
+  
   return (
     <div className="grid sticky top-2 grid-cols-3 join justify-between prose">
       <button
@@ -18,6 +39,7 @@ function Controllers({ addLabel, removeAll }: ControllersProps) {
         agregar
       </button>
       <button className="btn btn-sm bg-base-100 join-item text-neutral">
+        <input type="text" />
         cargar csv
       </button>
       <button

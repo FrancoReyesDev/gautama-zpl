@@ -7,6 +7,8 @@ interface PrintDialogProps {
 }
 
 export default function PrintDialog({ labels }: PrintDialogProps) {
+  const [qzConnection, setQzConnection] = useState<boolean | null>(null);
+
   const zplUtil = new ZPLUtil({
     dpi: 203,
     cols: 2,
@@ -21,19 +23,32 @@ export default function PrintDialog({ labels }: PrintDialogProps) {
     setZpl(newZpl);
   }, [labels]);
 
-  async function showPrinters() {
-    const qzInstance = await qz.websocket.connect();
+  useEffect(() => {
+    qz.websocket
+      .connect()
+      .then(() => {
+        setQzConnection(true);
+      })
+      .catch(() => {
+        console.error();
+        setQzConnection(false);
+      });
+  }, []);
+
+  async function handlePrint() {
     const printers = await qz.printers.find();
 
-    console.log({ printers });
+    const config = qz.configs.create(printers[0]);
+    qz.print(config, [zpl]).then(console.log).catch(console.error);
+    handleCloseModal();
   }
-
-  useEffect(() => {
-    showPrinters();
-  }, []);
 
   function handleShowModal() {
     dialogRef.current?.showModal();
+  }
+
+  function handleCloseModal() {
+    dialogRef.current?.close();
   }
 
   return (
@@ -46,8 +61,22 @@ export default function PrintDialog({ labels }: PrintDialogProps) {
       </button>
       <dialog ref={dialogRef} className="modal">
         <div className="modal-box">
-          <h3 className="text-lg font-bold">Hello!</h3>
+          <h3 className="text-lg font-bold">
+            Imprimir {labels.size} etiquetas?
+          </h3>
           <p className="py-4">{zpl}</p>
+          <div className="modal-action">
+            <button onClick={handleCloseModal} className="btn btn-sm btn-ghost">
+              Cancelar
+            </button>
+            <button
+              onClick={handlePrint}
+              disabled={qzConnection === false || qzConnection === null}
+              className="btn btn-sm btn-warning"
+            >
+              Aceptar
+            </button>
+          </div>
         </div>
         <form method="dialog" className="modal-backdrop">
           <button>close</button>
