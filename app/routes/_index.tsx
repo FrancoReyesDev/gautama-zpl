@@ -1,5 +1,14 @@
-import { redirect } from "@remix-run/react";
+import { NavLink } from "@remix-run/react";
 
-export function loader() {
-  return redirect("/labels");
+export default function Index() {
+  return (
+    <ul>
+      <li>
+        <NavLink to={"/labels"}>Generador de etiquetas</NavLink>
+      </li>
+      <li>
+        <NavLink to={"/config"}>Configuracion</NavLink>
+      </li>
+    </ul>
+  );
 }

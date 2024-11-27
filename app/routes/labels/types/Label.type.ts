@@ -1,4 +1,4 @@
-export default interface LabelType {
+export interface LabelType {
   title: string;
   sku: string;
   quantity: number;

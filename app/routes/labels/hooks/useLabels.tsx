@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { LabelType } from "../types/Label.type";
 
 const defaultLabel = {
   title: "",
@@ -6,43 +7,33 @@ const defaultLabel = {
   quantity: 1,
 };
 
+interface Labels {
+  [id: string]: LabelType;
+}
+
 export default function useLabels() {
-  const [labels, setLabels] = useState<Labels>(
-    new Map([[1, defaultLabel]])
-  );
+  const [labels, setLabels] = useState<Labels>({});
 
   return {
     labels,
-    addLabel() {
-      const newId =
-        labels.size === 0 ? 1 : Math.max(...labels.keys()) + 1;
-      const newLabels = new Map(labels);
-      newLabels.set(newId, { ...defaultLabel });
-      setLabels(newLabels);
+    addLabel(labelData: LabelType) {
+      const newId = crypto.randomUUID();
+      setLabels((currentLabels) => ({
+        ...currentLabels,
+        [newId]: labelData,
+      }));
     },
 
-    updateLabel(id: number, values: Label) {
-      if (!labels.has(id)) {
-        console.error(`Label con id ${id} no encontrada para actualizar.`);
-        return; // Salir si el id no existe
-      }
-      const newLabels = new Map(labels);
-      newLabels.set(id, values);
-      setLabels(newLabels);
+    updateLabel(id: string, newValues: LabelType) {
+      setLabels((currentLabels) => ({ ...currentLabels, [id]: newValues }));
     },
 
-    removeLabel(id: number) {
-      if (!labels.has(id)) {
-        console.error(`Label con id ${id} no encontrada para eliminar.`);
-        return; // Salir si el id no existe
-      }
-      const newLabels = new Map(labels);
-      newLabels.delete(id);
-      setLabels(newLabels);
+    removeLabel(id: string) {
+      setLabels(({ [id]: toDelete, ...rest }) => ({ ...rest }));
     },
 
     removeAllLabels() {
-      setLabels(new Map());
+      setLabels({});
     },
   };
 }

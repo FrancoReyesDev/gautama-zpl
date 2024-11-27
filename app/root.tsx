@@ -1,6 +1,7 @@
 import {
   Links,
   Meta,
+  NavLink,
   Outlet,
   Scripts,
   ScrollRestoration,
@@ -45,7 +46,7 @@ function Navbar() {
   );
 }
 
-export default function App() {
+function RootLayout() {
   return (
     <PrinterProvider>
       <div className="container mx-auto md:w-4/5 lg:w-3/6 pb-4 lg:py-6">
@@ -53,5 +54,13 @@ export default function App() {
         <Outlet />
       </div>
     </PrinterProvider>
+  );
+}
+
+export default function App() {
+  return (
+    <main className="container p-2 mx-auto md:w-4/5 lg:w-3/6 pb-4 lg:py-6 ">
+      <Outlet />
+    </main>
   );
 }
