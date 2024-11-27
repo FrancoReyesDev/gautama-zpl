@@ -16,12 +16,16 @@ export default function useLabels() {
 
   return {
     labels,
-    addLabel(labelData: LabelType) {
-      const newId = crypto.randomUUID();
-      setLabels((currentLabels) => ({
-        ...currentLabels,
-        [newId]: labelData,
-      }));
+    addLabel(labelData: LabelType | LabelType[]) {
+      const data = Array.isArray(labelData) ? labelData : [labelData];
+
+      data.forEach((label) => {
+        const newId = crypto.randomUUID();
+        setLabels((currentLabels) => ({
+          ...currentLabels,
+          [newId]: label,
+        }));
+      });
     },
 
     updateLabel(id: string, newValues: LabelType) {
