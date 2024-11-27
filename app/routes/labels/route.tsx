@@ -17,6 +17,8 @@ export default function Labels() {
   });
   const { labels, addLabel, removeAllLabels, updateLabel, removeLabel } =
     useLabels();
+
+  console.log({ labels });
   const { print } = usePrinter();
   function handleAddLabel() {
     if (labelData.quantity !== 0 && labelData.sku !== "") {

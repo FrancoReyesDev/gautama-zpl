@@ -1,11 +1,6 @@
 import { useState } from "react";
 import { LabelType } from "../types/Label.type";
-
-const defaultLabel = {
-  title: "",
-  sku: "",
-  quantity: 1,
-};
+import { v4 as uuid } from "uuid";
 
 interface Labels {
   [id: string]: LabelType;
@@ -20,7 +15,7 @@ export default function useLabels() {
       const data = Array.isArray(labelData) ? labelData : [labelData];
 
       data.forEach((label) => {
-        const newId = crypto.randomUUID();
+        const newId = uuid();
         setLabels((currentLabels) => ({
           ...currentLabels,
           [newId]: label,
