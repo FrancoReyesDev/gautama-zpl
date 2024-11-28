@@ -75,7 +75,7 @@ export default function LabelsTable({
                 <td className="p-1">
                   <button
                     onClick={handleRemoveLabel(id)}
-                    className="btn btn-sm btn-error"
+                    className="btn btn-sm btn-block btn-error"
                   >
                     eliminar
                   </button>
