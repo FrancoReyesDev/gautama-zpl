@@ -53,7 +53,7 @@ export default function w5cm_h3cm(
     `^BCN,${cmToDots(availableHeight / 4)},N,N,N`,
     `^FD>:${barcode}^FS`,
     `^FO${xOrigin},${cmToDots(paddingYCm + availableHeight / 4) + 6}`,
-    `^A0N,30,30`,
+    `^A0N,20,20`,
     `^FDsku: ${barcode}^FS`,
 
     ...textLines,
