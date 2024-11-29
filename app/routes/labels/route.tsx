@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ChangeEvent, useMemo, useState } from "react";
 import LabelsTable from "./components/LabelsTable.component";
 import NewLabelForm from "./components/NewLabelForm.component";
 import useLabels from "./hooks/useLabels";
@@ -6,17 +6,31 @@ import { LabelType } from "./types/Label.type";
 import ZPLUtil from "~/utils/ZPL.util";
 import { usePrinter } from "~/hooks/usePrinter.hook";
 import useAddFromCsvDialog from "./hooks/useAddFromCsvDialog.component";
+import templates from "~/utils/ZPL.util/templates";
 
 const defaultLabelData = { sku: "", quantity: 1, title: "" };
-const zplUtil = new ZPLUtil({ dpi: 203, cols: 2, labelTemplate: "w5cm_h3cm" });
+const labelTemplateNames = Object.keys(
+  templates
+) as unknown as (keyof typeof templates)[];
 
 export default function Labels() {
   const [labelData, setLabelData] = useState<LabelType>({
     ...defaultLabelData,
   });
+  const [labelTemplate, setLabelTemplate] = useState(labelTemplateNames[0]);
+  const [labelCols, setLabelCols] = useState(1);
+
+  const zplUtil = useMemo(() => {
+    const zplUtil = new ZPLUtil({
+      dpi: 203,
+      cols: labelCols,
+      labelTemplate,
+    });
+    return zplUtil;
+  }, [labelTemplate]);
   const { labels, addLabel, removeAllLabels, updateLabel, removeLabel } =
     useLabels();
-  const { print } = usePrinter();
+  const { print, printers, setPrinter, printer } = usePrinter();
   const { setOpen: setOpenCsvDialog, Dialog: AddFromCsvDialog } =
     useAddFromCsvDialog({ addLabel });
 
@@ -33,11 +47,29 @@ export default function Labels() {
 
   function handlePrint() {
     const zpl = zplUtil.createZplFromLabels(Object.values(labels));
+    console.log("imprimiendo");
     print(zpl);
+  }
+
+  function handleChangeLabelTemplate(event: ChangeEvent<HTMLSelectElement>) {
+    const value = event.target.value;
+
+    setLabelTemplate(value as keyof typeof templates);
+  }
+
+  function handleChangeLabelCols(event: ChangeEvent<HTMLInputElement>) {
+    const value = event.target.value;
+
+    setLabelCols(Number(value));
   }
 
   function handleOpenAddFromCsvDialog() {
     setOpenCsvDialog(true);
+  }
+
+  function handleChangePrinter(event: ChangeEvent<HTMLSelectElement>) {
+    const value = event.target.value;
+    setPrinter(value);
   }
 
   return (
@@ -46,6 +78,55 @@ export default function Labels() {
         <header className="prose">
           <h2>Generador de Etiquetas</h2>
         </header>
+
+        <div className="grid grid-cols-3 gap-2">
+          <label className="form-control w-full ">
+            <div className="label">
+              <span className="label-text">Impresora</span>
+            </div>
+            <select
+              className="select select-bordered"
+              value={printer || "none"}
+              onChange={handleChangePrinter}
+            >
+              <option value="none">-</option>
+              {printers.map((printer, index) => (
+                <option key={index} value={printer}>
+                  {printer}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="form-control w-full ">
+            <div className="label">
+              <span className="label-text">Plantilla</span>
+            </div>
+            <select
+              className="select select-bordered"
+              value={labelTemplate}
+              onChange={handleChangeLabelTemplate}
+            >
+              {labelTemplateNames.map((template, index) => (
+                <option key={index} value={template}>
+                  {template}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="form-control w-full ">
+            <div className="label">
+              <span className="label-text">Columnas</span>
+            </div>
+            <input
+              type="number"
+              className="input input-bordered"
+              min={1}
+              value={labelCols}
+              onChange={handleChangeLabelCols}
+            />
+          </label>
+        </div>
+
         <NewLabelForm labelData={labelData} setLabelData={setLabelData} />
         <div className="flex gap-2 mt-4 overflow-auto">
           <button onClick={handleAddLabel} className="btn btn-neutral">

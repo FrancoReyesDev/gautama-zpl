@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import ZPLUtil from "~/utils/ZPL.util";
 import qz from "qz-tray";
+import { LabelType } from "../types/Label.type";
 
 interface PrintDialogProps {
-  labels: Labels;
+  labels: LabelType[];
 }
 
 export default function PrintDialog({ labels }: PrintDialogProps) {
@@ -35,6 +36,8 @@ export default function PrintDialog({ labels }: PrintDialogProps) {
       });
   }, []);
 
+
+
   async function handlePrint() {
     const printers = await qz.printers.find();
 
@@ -62,8 +65,9 @@ export default function PrintDialog({ labels }: PrintDialogProps) {
       <dialog ref={dialogRef} className="modal">
         <div className="modal-box">
           <h3 className="text-lg font-bold">
-            Imprimir {labels.size} etiquetas?
+            Imprimir {labels.length} etiquetas?
           </h3>
+
           <p className="py-4">{zpl}</p>
           <div className="modal-action">
             <button onClick={handleCloseModal} className="btn btn-sm btn-ghost">

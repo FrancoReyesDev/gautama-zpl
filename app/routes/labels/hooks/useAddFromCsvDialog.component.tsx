@@ -44,6 +44,13 @@ export default function useAddFromCsvDialog({ addLabel }: Props) {
     return (
       <dialog ref={ref} className="modal">
         <div className="modal-box">
+          <header className="prose">
+            <h3>Agregar desde un CSV</h3>
+          </header>
+          <p className="prose my-4">
+            Recorda que el formato del CSV debe ser: <br />
+            <strong>codigo, titulo, cantidad</strong>
+          </p>
           <input
             type="file"
             className="file-input file-input-bordered w-full mt-2"

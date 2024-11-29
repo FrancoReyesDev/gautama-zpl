@@ -1,15 +1,32 @@
 import qz from "qz-tray";
+import { useEffect, useState } from "react";
 
 export function usePrinter() {
-  return {
-    async print(zpl: string) {
-      try {
-        await qz.websocket.connect({ host: "127.0.0.1" });
-        const printers = await qz.printers.find();
-        const config = qz.configs.create(printers[0]);
-        await qz.print(config, [zpl]);
+  const [isConnected, setIsConnected] = useState(false);
+  const [printers, setPrinters] = useState<string[]>([]);
+  const [printer, setPrinter] = useState<null | string>(null);
 
-        qz.websocket.disconnect();
+  async function initQz() {
+    await qz.websocket.connect();
+    const printers = await qz.printers.find();
+
+    setPrinters(Array.isArray(printers) ? printers : [printers]);
+    setIsConnected(true);
+  }
+
+  useEffect(() => {
+    initQz();
+  }, []);
+
+  return {
+    printers,
+    printer,
+    setPrinter,
+    async print(zpl: string) {
+      if (printer === null) return;
+      try {
+        const config = qz.configs.create(printer);
+        await qz.print(config, [zpl]);
 
         return { success: true, message: "Impresión completada" };
       } catch (error) {
