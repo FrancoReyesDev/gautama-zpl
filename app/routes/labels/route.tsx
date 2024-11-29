@@ -27,7 +27,7 @@ export default function Labels() {
       labelTemplate,
     });
     return zplUtil;
-  }, [labelTemplate]);
+  }, [labelTemplate, labelCols]);
   const { labels, addLabel, removeAllLabels, updateLabel, removeLabel } =
     useLabels();
   const { print, printers, setPrinter, printer } = usePrinter();
@@ -47,7 +47,6 @@ export default function Labels() {
 
   function handlePrint() {
     const zpl = zplUtil.createZplFromLabels(Object.values(labels));
-    console.log("imprimiendo");
     print(zpl);
   }
 
