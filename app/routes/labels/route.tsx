@@ -4,9 +4,10 @@ import NewLabelForm from "./components/NewLabelForm.component";
 import useLabels from "./hooks/useLabels";
 import { LabelType } from "./types/Label.type";
 import ZPLUtil from "~/utils/ZPL.util";
-import { usePrinter } from "~/hooks/usePrinter.hook";
 import useAddFromCsvDialog from "./hooks/useAddFromCsvDialog.component";
 import templates from "~/utils/ZPL.util/templates";
+import { NavLink, Outlet } from "@remix-run/react";
+import usePrinter from "~/hooks/usePrinter";
 
 const defaultLabelData = { sku: "", quantity: 1, title: "" };
 const labelTemplateNames = Object.keys(
@@ -45,8 +46,8 @@ export default function Labels() {
     }
   }
 
-  function handlePrint() {
-    const zpl = zplUtil.createZplFromLabels(Object.values(labels));
+  function printLabels(labels: LabelType[]) {
+    const zpl = zplUtil.createZplFromLabels(labels);
     print(zpl);
   }
 
@@ -126,6 +127,12 @@ export default function Labels() {
           </label>
         </div>
 
+        <div>
+          <NavLink to={"/labels/remote"} className="btn btn-info">
+            Impresora Remota
+          </NavLink>
+        </div>
+
         <NewLabelForm labelData={labelData} setLabelData={setLabelData} />
         <div className="flex gap-2 mt-4 overflow-auto">
           <button onClick={handleAddLabel} className="btn btn-neutral">
@@ -150,7 +157,7 @@ export default function Labels() {
               labels={labels}
             />
             <button
-              onClick={handlePrint}
+              onClick={() => printLabels(Object.values(labels))}
               className="btn btn-block btn-neutral btn-sm"
             >
               Imprimir
@@ -159,6 +166,7 @@ export default function Labels() {
         )}
       </article>
       <AddFromCsvDialog />
+      <Outlet context={printLabels} />
     </>
   );
 }

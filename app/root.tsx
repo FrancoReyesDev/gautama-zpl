@@ -10,7 +10,6 @@ import {
 import "./tailwind.css";
 import TabLink from "./components/TabLink";
 import SettingsIcon from "./components/icons/Settings";
-import { PrinterProvider } from "./contexts/Printer.context";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -48,12 +47,10 @@ function Navbar() {
 
 function RootLayout() {
   return (
-    <PrinterProvider>
-      <div className="container mx-auto md:w-4/5 lg:w-3/6 pb-4 lg:py-6">
-        <Navbar />
-        <Outlet />
-      </div>
-    </PrinterProvider>
+    <div className="container mx-auto md:w-4/5 lg:w-3/6 pb-4 lg:py-6">
+      <Navbar />
+      <Outlet />
+    </div>
   );
 }
 

@@ -1,7 +1,7 @@
 import qz from "qz-tray";
 import { useEffect, useState } from "react";
 
-export function usePrinter() {
+export default function usePrinter() {
   const [isConnected, setIsConnected] = useState(false);
   const [printers, setPrinters] = useState<string[]>([]);
   const [printer, setPrinter] = useState<null | string>(null);
