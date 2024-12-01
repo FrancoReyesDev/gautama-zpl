@@ -1,4 +1,4 @@
-import { ChangeEvent, useMemo, useState } from "react";
+import { ChangeEvent, createContext, useMemo, useState } from "react";
 import LabelsTable from "./components/LabelsTable.component";
 import NewLabelForm from "./components/NewLabelForm.component";
 import useLabels from "./hooks/useLabels";
@@ -166,7 +166,7 @@ export default function Labels() {
         )}
       </article>
       <AddFromCsvDialog />
-      <Outlet context={printLabels} />
+      <Outlet context={{ printLabels }} />
     </>
   );
 }

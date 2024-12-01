@@ -1,10 +1,12 @@
 import { useNavigate, useOutletContext } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
 import usePrintEventSource from "~/hooks/usePrintEventSource";
-import RemotePrinterContext from "../labels/types/RemotePrinterContext";
+import { LabelType } from "../labels/types/Label.type";
 
 export default function Remote() {
-  const { printLabels } = useOutletContext<RemotePrinterContext>();
+  const { printLabels } = useOutletContext<{
+    printLabels(label: LabelType[]): void;
+  }>();
   const navigate = useNavigate();
   const ref = useRef<HTMLDialogElement>(null);
   const { labels } = usePrintEventSource({
