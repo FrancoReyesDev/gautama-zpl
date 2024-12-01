@@ -19,12 +19,12 @@ export default function Labels() {
     ...defaultLabelData,
   });
   const [labelTemplate, setLabelTemplate] = useState(labelTemplateNames[0]);
-  const [labelCols, setLabelCols] = useState(1);
+  const [labelCols, setLabelCols] = useState("");
 
   const zplUtil = useMemo(() => {
     const zplUtil = new ZPLUtil({
       dpi: 203,
-      cols: labelCols,
+      cols: Number(labelCols) || 1,
       labelTemplate,
     });
     return zplUtil;
@@ -59,8 +59,7 @@ export default function Labels() {
 
   function handleChangeLabelCols(event: ChangeEvent<HTMLInputElement>) {
     const value = event.target.value;
-
-    setLabelCols(Number(value));
+    setLabelCols(value);
   }
 
   function handleOpenAddFromCsvDialog() {
@@ -120,8 +119,8 @@ export default function Labels() {
             <input
               type="number"
               className="input input-bordered"
-              min={1}
               value={labelCols}
+              min={1}
               onChange={handleChangeLabelCols}
             />
           </label>

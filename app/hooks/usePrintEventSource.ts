@@ -12,8 +12,8 @@ export default function usePrintEventSource({ eventSourceUrl }: Props) {
     const eventSource = new EventSource(eventSourceUrl);
 
     eventSource.onmessage = (event) => {
-      const label: LabelType = JSON.parse(event.data);
-      setLabels((currentLabels) => [...currentLabels, label]);
+      const labels: LabelType[] = JSON.parse(event.data);
+      setLabels((currentLabels) => [...currentLabels, ...labels]);
     };
 
     return () => {

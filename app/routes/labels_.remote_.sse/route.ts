@@ -2,10 +2,10 @@ import { ActionFunctionArgs } from "@remix-run/node";
 import { LabelType } from "../labels/types/Label.type";
 import { json } from "@remix-run/react";
 
-export const subscribers: { [id: string]: (data: LabelType) => void } = {};
+export const subscribers: { [id: string]: (data: LabelType[]) => void } = {};
 
 export async function action({ request }: ActionFunctionArgs) {
-  const body = (await request.json()) as LabelType;
+  const body = (await request.json()) as LabelType[];
 
   Object.values(subscribers).forEach((notify) => notify(body));
 
@@ -16,7 +16,7 @@ export function loader() {
   return new Response(
     new ReadableStream({
       start(controller) {
-        const notify = (data: LabelType) => {
+        const notify = (data: LabelType[]) => {
           controller.enqueue(`data: ${JSON.stringify(data)}\n\n`);
         };
 
