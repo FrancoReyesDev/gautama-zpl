@@ -41,7 +41,7 @@ export default function RemotePrints({ printLabels, open, setOpen }: Props) {
 
   function printRemainingLabelsInQueue() {
     const remainingLabels = arrayLabels.slice(queue);
-    console.log("impriminedo restantes", { remainingLabels });
+    printLabels(remainingLabels);
     setQueue((q) => q + remainingLabels.length);
   }
 
@@ -58,7 +58,7 @@ export default function RemotePrints({ printLabels, open, setOpen }: Props) {
     if (availableLabels.length < printCadencyToNumber) return;
 
     const labelsToPrint = availableLabels.slice(0, printCadencyToNumber);
-    console.log("impriminedo", { labelsToPrint });
+    printLabels(labelsToPrint);
     setQueue((q) => q + printCadencyToNumber);
   }
 
