@@ -1,13 +1,22 @@
-import { useNavigate, useOutletContext } from "@remix-run/react";
-import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
+import {
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import usePrintEventSource from "~/hooks/usePrintEventSource";
-import { LabelType } from "../labels/types/Label.type";
+import { LabelType } from "../types/Label.type";
 
-export default function Remote() {
-  const { printLabels } = useOutletContext<{
-    printLabels(label: LabelType[]): void;
-  }>();
-  const navigate = useNavigate();
+interface Props {
+  printLabels(label: LabelType[]): void;
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+export default function RemotePrints({ printLabels, open, setOpen }: Props) {
   const ref = useRef<HTMLDialogElement>(null);
   const { labels } = usePrintEventSource({
     eventSourceUrl: "/labels/remote/sse",
@@ -37,10 +46,11 @@ export default function Remote() {
   }
 
   useEffect(() => {
-    ref.current?.show();
+    if (open) ref.current?.show();
+    else ref.current?.close();
 
     return printRemainingLabelsInQueue;
-  }, []);
+  }, [open]);
 
   function printLabelsInQueue() {
     const printCadencyToNumber = Number(printCadency) || 1;
@@ -57,7 +67,7 @@ export default function Remote() {
   }, [queue, arrayLabels]);
 
   return (
-    <dialog className="modal modal-open" ref={ref}>
+    <dialog className="modal" ref={ref}>
       <div className="modal-box grid gap-2">
         <header className="prose">
           <h3>Impresion Remota</h3>
@@ -116,7 +126,7 @@ export default function Remote() {
       </div>
 
       <div className="modal-backdrop">
-        <button onClick={() => navigate(-1)}>close</button>
+        <button onClick={() => setOpen(false)}>close</button>
       </div>
     </dialog>
   );
