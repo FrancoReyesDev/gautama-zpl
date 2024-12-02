@@ -106,9 +106,7 @@ export default function RemotePrints({ printLabels, open, setOpen }: Props) {
                       <td>{sku}</td>
                       <td>{title}</td>
                       <td>{quantity}</td>
-                      <td>
-                        {index < queue ? "impreso" : "en espera"} {queue}
-                      </td>
+                      <td>{index < queue ? "impreso" : "en espera"}</td>
                     </tr>
                   ))}
                 </tbody>
