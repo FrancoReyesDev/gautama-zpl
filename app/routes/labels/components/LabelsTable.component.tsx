@@ -19,7 +19,6 @@ export default function LabelsTable({
   ) {
     return function (event: ChangeEvent<HTMLInputElement>) {
       const newValue = event.target.value;
-
       updateLabel(id, { ...label, [field]: newValue });
     };
   }

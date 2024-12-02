@@ -27,18 +27,12 @@ export function usePrinterContext() {
   return useContext(context);
 }
 
-interface Props extends Partial<PrinterContext> {
+interface Props {
   children: React.ReactNode;
+  externalPrinter?: PrinterContext;
 }
 
-export function PrinterContextProvider({
-  children,
-  ...printerOverride
-}: Props) {
-  const printer = usePrinter();
-  return (
-    <context.Provider value={{ ...printer, ...printerOverride }}>
-      {children}
-    </context.Provider>
-  );
+export function PrinterContextProvider({ children, externalPrinter }: Props) {
+  const printer = externalPrinter ?? usePrinter();
+  return <context.Provider value={printer}>{children}</context.Provider>;
 }

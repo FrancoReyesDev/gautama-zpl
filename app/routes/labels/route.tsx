@@ -19,6 +19,7 @@ export default function Labels() {
   const { labels, addLabel, removeAllLabels, updateLabel, removeLabel } =
     useLabels();
   const printer = usePrinter();
+
   const { setOpen: setOpenCsvDialog, Dialog: AddFromCsvDialog } =
     useAddFromCsvDialog({ addLabel });
 
@@ -38,7 +39,7 @@ export default function Labels() {
   }
 
   return (
-    <PrinterContextProvider {...printer}>
+    <PrinterContextProvider externalPrinter={printer}>
       <article className="grid gap-4">
         <header className="prose">
           <h2>Generador de Etiquetas</h2>

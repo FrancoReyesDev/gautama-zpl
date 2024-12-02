@@ -36,20 +36,37 @@ export default function usePrinter() {
     return zplUtil;
   }, [localPrinterConfig]);
 
-  async function initQz() {
-    await qz.websocket.connect();
-    const printers = await qz.printers.find();
+  async function connectQz() {
+    if (isConnected === true) return;
 
-    setPrinters(Array.isArray(printers) ? printers : [printers]);
+    await qz.websocket.connect();
     setIsConnected(true);
+  }
+
+  async function initQz() {
+    await connectQz();
+    const printers = await qz.printers.find();
+    setPrinters(Array.isArray(printers) ? printers : [printers]);
+  }
+
+  async function disconnectQz() {
+    if (isConnected) {
+      await qz.websocket.disconnect();
+      setIsConnected(false);
+    }
   }
 
   useEffect(() => {
     initQz();
+
+    return () => {
+      disconnectQz();
+    };
   }, []);
 
   async function printZpl(zpl: string) {
-    if (localPrinterConfig.printer === null) return;
+    if (localPrinterConfig.printer === null)
+      return console.error("printer is does not defined");
     try {
       const qzConfig = qz.configs.create(localPrinterConfig.printer);
       await qz.print(qzConfig, [zpl]);
