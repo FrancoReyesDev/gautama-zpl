@@ -1,15 +1,12 @@
 import {
   Links,
   Meta,
-  NavLink,
   Outlet,
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
 
 import "./tailwind.css";
-import TabLink from "./components/TabLink";
-import SettingsIcon from "./components/icons/Settings";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -29,29 +26,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-function Navbar() {
-  return (
-    <header className="navbar px-4">
-      <div role="tablist" className="navbar-start tabs tabs-bordered ">
-        <TabLink to="/labels">etiquetas</TabLink>
-        <TabLink to="/zpl">zpl</TabLink>
-      </div>
-      <div className="navbar-end ">
-        <button className="btn btn-ghost">
-          <SettingsIcon />
-        </button>
-      </div>
-    </header>
-  );
-}
-
-function RootLayout() {
-  return (
-    <div className="container mx-auto md:w-4/5 lg:w-3/6 pb-4 lg:py-6">
-      <Navbar />
-      <Outlet />
-    </div>
-  );
+export function HydrateFallback() {
+  return <p className="p-4">Cargando…</p>;
 }
 
 export default function App() {

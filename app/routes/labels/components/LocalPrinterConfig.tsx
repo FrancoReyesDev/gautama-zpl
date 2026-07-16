@@ -1,11 +1,9 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent } from "react";
 import { usePrinterContext } from "~/contexts/PrinterContext";
 import templates from "~/utils/ZPL.util/templates";
-import RemotePrints from "./RemotePrints";
 
 export default function LocalPrinterConfig() {
-  const [openRemotePrints, setOpenRemotePrints] = useState(false);
-  const { localPrinterConfig, setLocalPrinterConfig, printers, printLabels } =
+  const { localPrinterConfig, setLocalPrinterConfig, printers } =
     usePrinterContext();
 
   function handleChaneLocalPrinterConfig(
@@ -71,21 +69,6 @@ export default function LocalPrinterConfig() {
         </label>
       </div>
 
-      <div>
-        <button
-          onClick={() => {
-            setOpenRemotePrints(true);
-          }}
-          className="btn btn-info"
-        >
-          Impresora Remota
-        </button>
-      </div>
-      <RemotePrints
-        open={openRemotePrints}
-        setOpen={setOpenRemotePrints}
-        printLabels={printLabels}
-      />
     </>
   );
 }

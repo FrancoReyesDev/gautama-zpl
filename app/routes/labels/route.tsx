@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import ZPLUtil from "~/utils/ZPL.util";
 import LabelsTable from "./components/LabelsTable.component";
 import NewLabelForm from "./components/NewLabelForm.component";
 import useLabels from "./hooks/useLabels";
@@ -7,7 +8,6 @@ import useAddFromCsvDialog from "./hooks/useAddFromCsvDialog.component";
 import usePrinter from "~/hooks/usePrinter";
 import LocalPrinterConfig from "./components/LocalPrinterConfig";
 import { PrinterContextProvider } from "~/contexts/PrinterContext";
-import RemotePrinterConfig from "./components/RemotePrinterConfig";
 
 const defaultLabelData = { sku: "", quantity: 1, title: "" };
 
@@ -19,6 +19,16 @@ export default function Labels() {
   const { labels, addLabel, removeAllLabels, updateLabel, removeLabel } =
     useLabels();
   const printer = usePrinter();
+
+  const zpl = useMemo(
+    () =>
+      new ZPLUtil({
+        dpi: 203,
+        cols: Number(printer.localPrinterConfig.cols) || 1,
+        labelTemplate: printer.localPrinterConfig.template,
+      }).createZplFromLabels(Object.values(labels)),
+    [labels, printer.localPrinterConfig]
+  );
 
   const { setOpen: setOpenCsvDialog, Dialog: AddFromCsvDialog } =
     useAddFromCsvDialog({ addLabel });
@@ -45,21 +55,7 @@ export default function Labels() {
           <h2>Generador de Etiquetas</h2>
         </header>
 
-        <div className="form-control">
-          <label className="label cursor-pointer flex justify-start gap-2 ">
-            <input
-              type="checkbox"
-              className="toggle"
-              checked={printer.isRemote}
-              onChange={(e) => printer.setIsRemote(e.target.checked)}
-            />
-            <span className="label-text">
-              {printer.isRemote ? "Impresora Remota" : "Impresora Local"}
-            </span>
-          </label>
-        </div>
-
-        {printer.isRemote ? <RemotePrinterConfig /> : <LocalPrinterConfig />}
+        <LocalPrinterConfig />
 
         <NewLabelForm labelData={labelData} setLabelData={setLabelData} />
         <div className="flex gap-2 mt-4 overflow-auto">
@@ -84,12 +80,23 @@ export default function Labels() {
               updateLabel={updateLabel}
               labels={labels}
             />
-            <button
-              onClick={() => printer.printLabels(Object.values(labels))}
-              className="btn btn-block btn-neutral btn-sm"
-            >
-              Imprimir
-            </button>
+            <div className="grid gap-2">
+              <div className="flex items-center justify-between">
+                <span className="label-text font-semibold">ZPL generado</span>
+                <button
+                  onClick={() => navigator.clipboard.writeText(zpl)}
+                  className="btn btn-primary btn-sm"
+                >
+                  Copiar ZPL
+                </button>
+              </div>
+              <textarea
+                readOnly
+                value={zpl}
+                rows={10}
+                className="textarea textarea-bordered font-mono text-xs w-full"
+              />
+            </div>
           </>
         )}
         <AddFromCsvDialog />

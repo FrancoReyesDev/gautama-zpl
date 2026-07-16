@@ -107,10 +107,10 @@ export default class ZPLUtil implements Props {
     const arrayOfLabels: { sku: string; title: string }[] = [];
 
     labels.forEach(({ sku, title, quantity }) => {
-      if (sku.trim() === "" || quantity === 0) return;
+      const count = Math.trunc(Number(quantity)) || 0;
+      if (sku.trim() === "" || count <= 0) return;
 
-      const array = new Array(quantity);
-      array.fill({ sku, title: title || sku }, 0);
+      const array = new Array(count).fill({ sku, title: title || sku });
 
       arrayOfLabels.push(...array);
     });

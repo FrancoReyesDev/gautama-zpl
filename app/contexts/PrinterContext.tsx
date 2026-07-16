@@ -9,16 +9,12 @@ const printerContextFallback: PrinterContext = {
     cols: 2,
     template: "w5cm_h3cm",
   },
-  remotePrinterConfig: { host: "" },
-  setRemotePrinterConfig() {},
   printers: [],
   printLabels() {},
   async printZpl() {
     return undefined;
   },
   setLocalPrinterConfig() {},
-  setIsRemote() {},
-  isRemote: false,
 };
 
 const context = createContext<PrinterContext>(printerContextFallback);

@@ -10,16 +10,9 @@ interface LocalPrinterConfig {
   printer: string | null;
 }
 
-interface RemotePrinterConfig {
-  host: string;
-}
-
 export default function usePrinter() {
   const [isConnected, setIsConnected] = useState(false);
   const [printers, setPrinters] = useState<string[]>([]);
-  const [isRemote, setIsRemote] = useState(false);
-  const [remotePrinterConfig, setRemotePrinterConfig] =
-    useState<RemotePrinterConfig>({ host: "" });
   const [localPrinterConfig, setLocalPrinterConfig] =
     useState<LocalPrinterConfig>({
       template: Object.keys(templates)[0] as LocalPrinterConfig["template"],
@@ -94,9 +87,5 @@ export default function usePrinter() {
     printLabels,
     localPrinterConfig,
     setLocalPrinterConfig,
-    remotePrinterConfig,
-    setRemotePrinterConfig,
-    isRemote,
-    setIsRemote,
   };
 }
